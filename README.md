@@ -53,6 +53,9 @@ In most charts:
 
 ## PieChart
 
+<img width="756" height="467" alt="Image" src="https://github.com/user-attachments/assets/40e651ee-0e72-4a9e-b04f-773f92b5bbd5" />
+<br></br>
+
 PieChart consumes List<ChartMark> and uses each mark’s y as slice magnitude.
 
 Example:
@@ -92,9 +95,6 @@ fun PieChartExample() {
     )
 }
 ```
-<p align="center">
-<img width="756" height="467" alt="Image" src="https://github.com/user-attachments/assets/40e651ee-0e72-4a9e-b04f-773f92b5bbd5" />
-</p>
 
 ## ProgressChart
 
@@ -104,6 +104,9 @@ ProgressChart consumes List<ProgressChartMark>.
 - Bar mode (isDonut=false): stacked horizontal bars
 
 ### Progress bars - stacked vertically
+
+<img width="756" height="376" alt="Image" src="https://github.com/user-attachments/assets/24149023-a8ee-4b8a-8a3b-9bda0c0c41c1" />
+
 
 Example:
 ```kotlin
@@ -135,11 +138,11 @@ fun ProgressBarChartExample() {
     )
 }
 ```
-<p align="center">
-<img width="756" height="376" alt="Image" src="https://github.com/user-attachments/assets/24149023-a8ee-4b8a-8a3b-9bda0c0c41c1" />
-</p>
 
 ### Donut/ring progress
+
+<img width="756" height="588" alt="Image" src="https://github.com/user-attachments/assets/bd7e13a2-902a-4936-bcca-d01d54c437cd" />
+
 
 Example:
 ```kotlin
@@ -176,9 +179,6 @@ fun ProgressRingChartExample() {
     )
 }
 ```
-<p align="center">
-<img width="756" height="588" alt="Image" src="https://github.com/user-attachments/assets/bd7e13a2-902a-4936-bcca-d01d54c437cd" />
-</p>
 
 Notes:
 - If you want only one ring, pass a list with one ProgressChartMark.
