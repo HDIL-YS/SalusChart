@@ -92,6 +92,7 @@ fun PieChartExample() {
     )
 }
 ```
+<img width="1080" height="667" alt="Image" src="[https://github.com/user-attachments/assets/b4ffa88f-e20a-422d-9d07-1502af8fbbff](https://github.com/user-attachments/assets/b4ffa88f-e20a-422d-9d07-1502af8fbbff)" />
 
 ## ProgressChart
 
@@ -132,6 +133,7 @@ fun ProgressBarChartExample() {
     )
 }
 ```
+<img width="1080" height="537" alt="Image" src="[https://github.com/user-attachments/assets/a7f176ef-5d04-4e34-afaf-e33ffab1c7ea](https://github.com/user-attachments/assets/a7f176ef-5d04-4e34-afaf-e33ffab1c7ea)" />
 
 ### Donut/ring progress
 
@@ -170,6 +172,7 @@ fun ProgressRingChartExample() {
     )
 }
 ```
+<img width="1080" height="840" alt="Image" src="[https://github.com/user-attachments/assets/2d4fe548-8bd5-4bc3-b1c6-f830e859663d](https://github.com/user-attachments/assets/2d4fe548-8bd5-4bc3-b1c6-f830e859663d)" />
 
 Notes:
 - If you want only one ring, pass a list with one ProgressChartMark.
