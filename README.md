@@ -172,7 +172,7 @@ fun ProgressRingChartExample() {
     )
 }
 ```
-<img width="1080" height="840" alt="Image" src="[https://github.com/user-attachments/assets/2d4fe548-8bd5-4bc3-b1c6-f830e859663d](https://github.com/user-attachments/assets/2d4fe548-8bd5-4bc3-b1c6-f830e859663d)" />
+<img width="1080" height="840" alt="Image" src="https://github.com/user-attachments/assets/bd7e13a2-902a-4936-bcca-d01d54c437cd" />
 
 Notes:
 - If you want only one ring, pass a list with one ProgressChartMark.
