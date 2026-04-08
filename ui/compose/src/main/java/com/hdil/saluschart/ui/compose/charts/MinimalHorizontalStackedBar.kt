@@ -18,11 +18,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.max
 
+/**
+ * A single colored segment for use in [MinimalHorizontalStackedBar].
+ *
+ * @param value Relative size of this segment; segments are normalized against their sum.
+ * @param color Fill color for this segment.
+ */
 data class StackedBarSegment(
     val value: Float,          // portion size (relative)
     val color: Color
 )
 
+/**
+ * Renders a compact horizontal stacked bar with a speech-bubble label pointing at the selected segment.
+ *
+ * The bar is drawn as a pill track subdivided into proportional colored segments. A small
+ * callout bubble with a triangular pointer is drawn above the center of [selectedSegmentIndex].
+ *
+ * @param modifier Modifier applied to the Canvas.
+ * @param segments Ordered list of segments that partition the bar.
+ * @param trackColor Background color of the pill track.
+ * @param selectedSegmentIndex Index of the segment the callout bubble points to.
+ * @param label Text displayed inside the callout bubble.
+ * @param bubbleColor Background color of the callout bubble.
+ * @param bubbleTextColor Text color inside the callout bubble.
+ * @param barHeight Height of the pill bar.
+ * @param cornerRadius Corner radius of the pill bar; defaults to fully rounded.
+ * @param bubblePaddingH Horizontal padding inside the bubble.
+ * @param bubblePaddingV Vertical padding inside the bubble.
+ * @param bubbleCornerRadius Corner radius of the bubble rectangle.
+ * @param pointerWidth Width of the triangular pointer.
+ * @param pointerHeight Height of the triangular pointer.
+ * @param bubbleGapFromBar Gap between the bottom of the bubble and the top of the bar.
+ * @param bubbleTextSizeSp Font size of the bubble label in sp.
+ */
 @Composable
 fun MinimalHorizontalStackedBar(
     modifier: Modifier = Modifier,

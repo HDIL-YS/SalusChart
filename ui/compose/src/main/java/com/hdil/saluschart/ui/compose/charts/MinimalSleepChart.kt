@@ -10,18 +10,43 @@ import androidx.compose.ui.graphics.Color
 import kotlin.math.max
 
 /**
- * One column is a set of stacked "segments" (capsules).
- * Multiple columns render side-by-side (like multiple days).
+ * A single colored sleep stage segment for use in [SleepColumn].
+ *
+ * @param value Duration of this stage in any consistent unit (e.g., minutes).
+ * @param color Fill color representing this sleep stage.
  */
 data class SleepSegment(
     val value: Float,      // e.g., minutes (any unit is fine)
     val color: Color
 )
 
+/**
+ * A single column of sleep stage segments for use in [MinimalSleepChart].
+ *
+ * @param segments Ordered list of sleep stage segments stacked from bottom to top.
+ */
 data class SleepColumn(
     val segments: List<SleepSegment>
 )
 
+/**
+ * Renders a compact multi-column sleep chart where each column is a vertical stack of
+ * rounded-rectangle sleep stage capsules.
+ *
+ * Columns are placed side-by-side with equal slot widths. Heights are normalized so the
+ * tallest column fills the available canvas height (or [maxValueOverride] if provided).
+ *
+ * @param modifier Modifier applied to the Canvas.
+ * @param columns Ordered list of day columns to render.
+ * @param barWidthRatio Width of each capsule as a fraction of its slot width.
+ * @param columnGapRatio Horizontal gap between columns as a fraction of the capsule width.
+ * @param segmentGapRatio Vertical gap between segments within a column as a fraction of the capsule width.
+ * @param trackColor Optional background track color drawn behind each column when [trackAlpha] > 0.
+ * @param trackAlpha Alpha of the background track; set to 0 to hide it.
+ * @param cornerRadiusRatio Corner radius of each capsule as a fraction of the capsule width.
+ * @param maxValueOverride Optional total value that maps to the full canvas height; computed from
+ *   the tallest column when null.
+ */
 @Composable
 fun MinimalSleepChart(
     modifier: Modifier = Modifier,

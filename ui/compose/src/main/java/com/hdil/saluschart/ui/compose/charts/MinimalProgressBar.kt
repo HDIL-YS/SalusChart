@@ -18,6 +18,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.min
 
+/**
+ * Renders a compact horizontal progress bar with a speech-bubble label anchored to the fill edge.
+ *
+ * The bar is drawn as a pill track partially filled to [progress]. A callout bubble with a
+ * triangular pointer is positioned above the leading edge of the filled region.
+ *
+ * @param modifier Modifier applied to the Canvas.
+ * @param progress Fill fraction (0–1); values outside this range are clamped.
+ * @param label Text displayed inside the callout bubble; defaults to the integer percentage.
+ * @param trackColor Background color of the pill track.
+ * @param fillColor Color of the filled portion of the bar.
+ * @param bubbleColor Background color of the callout bubble.
+ * @param bubbleTextColor Text color inside the callout bubble.
+ * @param barHeight Height of the pill bar.
+ * @param cornerRadius Corner radius of the pill bar; defaults to fully rounded.
+ * @param bubblePaddingH Horizontal padding inside the bubble.
+ * @param bubblePaddingV Vertical padding inside the bubble.
+ * @param bubbleCornerRadius Corner radius of the bubble rectangle.
+ * @param pointerWidth Width of the triangular pointer tail.
+ * @param pointerHeight Height of the triangular pointer tail.
+ * @param bubbleGapFromBar Gap between the bottom of the bubble and the top of the bar.
+ * @param bubbleTextSizeSp Font size of the bubble label in sp.
+ */
 @Composable
 fun MinimalProgressBar(
     modifier: Modifier = Modifier,

@@ -40,7 +40,7 @@ android {
 dependencies {
     implementation(project(":core:chart"))
     implementation(project(":core:transform"))
-    implementation(project(":ui:theme"))
+    api(project(":ui:theme"))
     implementation(project(":data:model"))
 
     implementation(libs.androidx.ui.versioned)

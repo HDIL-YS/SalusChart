@@ -29,12 +29,52 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
+/**
+ * A colored zone in a [MultiSegmentGaugeChart].
+ *
+ * @param start Start value of this segment on the gauge scale.
+ * @param end End value of this segment on the gauge scale.
+ * @param color Fill color of this segment.
+ */
 data class GaugeSegment(
     val start: Float,
     val end: Float,
     val color: Color
 )
 
+/**
+ * Renders a card-style multi-segment gauge bar with a hexagonal marker, tick labels, and an
+ * optional numeric value label.
+ *
+ * The bar is divided into equal-width bands corresponding to [segments]. A hexagonal cut-out
+ * marker is drawn at the position of [value] within the [tickValues] band grid. When [value]
+ * is null the gauge renders in a no-data state and [noDataMessage] is shown if provided.
+ *
+ * @param modifier Modifier applied to the Surface card.
+ * @param cornerRadius Corner radius of the card.
+ * @param cardPaddingH Horizontal padding inside the card.
+ * @param cardPaddingV Vertical padding inside the card.
+ * @param title Title text displayed at the top of the card.
+ * @param value Current value to indicate on the gauge; null renders a no-data state.
+ * @param minValue Minimum value of the gauge scale.
+ * @param maxValue Maximum value of the gauge scale.
+ * @param segments Ordered list of colored zones covering the gauge range.
+ * @param tickValues Boundary values used to define equal-width bands and bottom axis labels.
+ * @param leftHint Optional label shown on the left side below the bar.
+ * @param rightHint Optional label shown on the right side below the bar.
+ * @param noDataMessage Optional message shown when [value] is null.
+ * @param trackColor Background track color behind the segments.
+ * @param textGray Color used for secondary text (hints, tick labels).
+ * @param titleColor Color of the title text.
+ * @param barHeight Height of the gauge bar.
+ * @param barHorizontalPadding Horizontal padding applied to the bar and tick row.
+ * @param markerOuterRadiusFactor Radius of the outer white circle as a fraction of bar height.
+ * @param markerHexRadiusFactor Radius of the hexagon as a fraction of the outer circle radius.
+ * @param markerHexStrokeWidth Stroke width of the hexagonal outline.
+ * @param valueFontSizeSp Font size of the value label in sp.
+ * @param valueFontWeight Font weight of the value label.
+ * @param valueToMarkerGap Gap between the value label and the top of the bar.
+ */
 @Composable
 fun MultiSegmentGaugeChart(
     modifier: Modifier = Modifier,

@@ -52,6 +52,54 @@ import com.hdil.saluschart.core.chart.chartMath.ChartMath
 import com.hdil.saluschart.core.chart.model.BarCornerRadiusFractions
 import com.hdil.saluschart.ui.theme.ChartColor
 
+/**
+ * Displays a vertical bar chart for the provided data, with support for interactive tooltips,
+ * optional horizontal scrolling, paged navigation, a configurable Y-axis, reference lines,
+ * and a legend.
+ *
+ * When [pageSize] is set and the data exceeds that value, the chart automatically switches to a
+ * horizontally pageable layout with a shared Y-axis across all pages.
+ *
+ * @param modifier Modifier applied to the outermost layout container.
+ * @param data List of [ChartMark] entries to render as bars. Returns early if empty.
+ * @param xLabel Text label displayed below the X-axis.
+ * @param yLabel Text label displayed alongside the Y-axis.
+ * @param title Chart title shown above the chart area when [showTitle] is true.
+ * @param barColor Fill color applied to every bar.
+ * @param minY Optional lower bound for the Y-axis; computed from data when null.
+ * @param maxY Optional upper bound for the Y-axis; computed from data when null.
+ * @param barWidthRatio Fraction of each slot's width occupied by the bar (0.0–1.0).
+ * @param xLabelTextSize Text size in pixels for X-axis tick labels.
+ * @param tooltipTextSize Text size in pixels for the tooltip label.
+ * @param yAxisPosition Side on which the Y-axis is drawn ([YAxisPosition.LEFT] or [YAxisPosition.RIGHT]).
+ * @param interactionType Controls bar tap behaviour: [InteractionType.Bar.BAR] makes the bar
+ *   itself tappable; [InteractionType.Bar.TOUCH_AREA] uses an invisible full-height tap region.
+ * @param onBarClick Optional callback invoked with the tapped bar's index and Y value.
+ * @param showTitle Whether to render the [title] above the chart.
+ * @param showYAxis Whether to draw the Y-axis line and tick labels.
+ * @param showLabel Whether to display the data value label on top of each bar.
+ * @param xLabelAutoSkip When true, overlapping X-axis tick labels are automatically skipped.
+ * @param maxXTicksLimit Optional cap on the number of X-axis tick labels rendered.
+ * @param yTickStep Fixed interval between Y-axis grid lines; auto-calculated when null.
+ * @param unit Unit string appended to tooltip values (e.g. "kg", "bpm").
+ * @param referenceLines Horizontal reference lines drawn across the plot area.
+ * @param showYAxisHighlight When true, reference-line values are highlighted on the Y-axis.
+ * @param windowSize Number of data points visible at once in free-scroll mode; enables horizontal
+ *   scrolling when smaller than the total data size. Mutually exclusive with [pageSize].
+ * @param contentPadding Padding applied around the chart content area.
+ * @param pageSize Number of data points shown per page; enables the pager when data exceeds this
+ *   value. Mutually exclusive with [windowSize].
+ * @param unifyYAxisAcrossPages When true, all pages share the same Y-axis range in paged mode.
+ * @param initialPageIndex Page to display first in paged mode; defaults to the last page when null.
+ * @param yAxisFixedWidth Width reserved for the external Y-axis pane in scroll or highlight mode.
+ * @param barCornerRadiusFraction Uniform corner radius for all bar corners as a fraction of bar half-width.
+ * @param barCornerRadiusFractions Per-corner radius fractions; overrides [barCornerRadiusFraction] when provided.
+ * @param roundTopOnly When true, only the top corners of each bar are rounded.
+ * @param showLegend Whether to display a legend entry near the chart.
+ * @param legendPosition Where to place the legend relative to the chart.
+ * @param legendLabel Text shown in the legend for this data series.
+ * @param tooltipColor Background color of the tooltip bubble; defaults to [barColor].
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BarChart(
@@ -61,9 +109,9 @@ fun BarChart(
     yLabel: String = "Value",
     title: String = "Bar Chart Example",
     barColor: Color = ChartColor.Default,
-    minY: Double? = null, // Minimum Y value for chart
-    maxY: Double? = null, // Maximum Y value for chart
-    barWidthRatio: Float = 0.8f, // Ratio of bar width to space width (바 너비 / 한 칸 너비)
+    minY: Double? = null,
+    maxY: Double? = null,
+    barWidthRatio: Float = 0.8f,
     xLabelTextSize: Float = 28f,
     tooltipTextSize: Float = 32f,
     yAxisPosition: YAxisPosition = YAxisPosition.LEFT,
@@ -72,19 +120,18 @@ fun BarChart(
     showTitle: Boolean = false,
     showYAxis: Boolean = true,
     showLabel: Boolean = false,
-    xLabelAutoSkip: Boolean = true, // Automatically skip labels if they overlap
-    maxXTicksLimit: Int? = null, // Maximum number of x-axis labels to display
-    yTickStep: Double? = null, // y-axis grid tick step (automatically calculated if null)
+    xLabelAutoSkip: Boolean = true,
+    maxXTicksLimit: Int? = null,
+    yTickStep: Double? = null,
     unit: String = "",
     referenceLines: List<ReferenceLineSpec> = emptyList(),
     showYAxisHighlight: Boolean = false,
-    // Free-scroll mode
-    windowSize: Int? = null,                    // visible items in scroll window
-    contentPadding: PaddingValues = PaddingValues(16.dp),    // Free-scroll paddings
-    pageSize: Int? = null,                      // items per page
+    windowSize: Int? = null,
+    contentPadding: PaddingValues = PaddingValues(16.dp),
+    pageSize: Int? = null,
     unifyYAxisAcrossPages: Boolean = true,
-    initialPageIndex: Int? = null,          // initial page to show (last page if null)
-    yAxisFixedWidth: Dp = 20.dp,            // Padding between the chart and the y-axis
+    initialPageIndex: Int? = null,
+    yAxisFixedWidth: Dp = 20.dp,
     barCornerRadiusFraction: Float = 0f,
     barCornerRadiusFractions: BarCornerRadiusFractions? = null,
     roundTopOnly: Boolean = false,
@@ -92,7 +139,7 @@ fun BarChart(
     legendPosition: LegendPosition = LegendPosition.BOTTOM,
     legendLabel: String = "",
     tooltipColor: Color = barColor,
-    ) {
+) {
     if (data.isEmpty()) return
 
     // Validate that scrolling and paging modes are not both enabled
@@ -100,10 +147,7 @@ fun BarChart(
         "Cannot enable both scrolling mode (windowSize) and paging mode (pageSize) simultaneously"
     }
 
-    // Compute effective page size (0 = off)
     val requestedPageSize = (pageSize ?: 0).coerceAtLeast(0)
-
-    // Enable paging if pageSize is provided and data exceeds page size
     val enablePaging = requestedPageSize > 0 && data.size > requestedPageSize
 
     if (enablePaging) {
@@ -111,7 +155,6 @@ fun BarChart(
             modifier = modifier,
             data = data,
             pageSize = requestedPageSize,
-            // visuals
             title = title,
             xLabel = xLabel,
             yLabel = yLabel,
@@ -125,7 +168,6 @@ fun BarChart(
             showLabel = showLabel,
             showYAxis = showYAxis,
             onBarClick = onBarClick,
-            // scale/paging
             showTitle = showTitle,
             outerPadding = contentPadding,
             unifyYAxisAcrossPages = unifyYAxisAcrossPages,
@@ -210,7 +252,6 @@ fun BarChart(
                 if (yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.LEFT) {
                     VerticalAxisLabel(yLabel)
                 }
-                // Left fixed axis pane
                 if (useExternalYAxis && yAxisPosition == YAxisPosition.LEFT) {
                     Canvas(
                         modifier = Modifier
@@ -233,7 +274,6 @@ fun BarChart(
                     }
                 }
 
-                // Calculate padding when Y-axis is hidden (external axis handles it), fixed axis, or VerticalAxisLabel already provides margin
                 val hasLeftLabel = yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.LEFT
                 val hasRightLabel = yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.RIGHT
                 val startPad = when {
@@ -296,10 +336,8 @@ fun BarChart(
                         )
                     }
 
-                    // Bars & interaction
                     when (interactionType) {
                         InteractionType.Bar.TOUCH_AREA -> {
-                            // Draw visual bars
                             chartMetrics?.let { metrics ->
                                 ChartDraw.Bar.BarMarker(
                                     data = data,
@@ -319,7 +357,6 @@ fun BarChart(
                                     roundTopOnly = roundTopOnly,
                                 )
                             }
-                            // Draw interactive touch area
                             chartMetrics?.let { metrics ->
                                 ChartDraw.Bar.BarMarker(
                                     data = data,
@@ -337,7 +374,6 @@ fun BarChart(
                             }
                         }
                         InteractionType.Bar.BAR -> {
-                            // Draw interactive bars
                             chartMetrics?.let { metrics ->
                                 ChartDraw.Bar.BarMarker(
                                     data = data,
@@ -364,7 +400,6 @@ fun BarChart(
                         }
                     }
 
-                    // Draw reference lines
                     if (referenceLines.isNotEmpty()) {
                         chartMetrics?.let { metrics ->
                             ReferenceLine.ReferenceLines(
@@ -388,7 +423,7 @@ fun BarChart(
                         val anchorXPx = spec.offset.x
                         val anchorYPx = spec.offset.y
 
-                        // Center tooltip on bar; clamp so it stays within chart bounds
+                        // Center on bar; clamp to chart bounds
                         val xPx = (anchorXPx - estimatedW / 2f)
                             .coerceIn(0f, (parentWidthPx - estimatedW).coerceAtLeast(0f))
 
@@ -413,7 +448,6 @@ fun BarChart(
                     }
                 }
 
-                // Right fixed axis pane
                 if (useExternalYAxis && yAxisPosition == YAxisPosition.RIGHT) {
                     Canvas(
                         modifier = Modifier
@@ -500,7 +534,6 @@ private fun BarChartPagedInternal(
     modifier: Modifier,
     data: List<ChartMark>,
     pageSize: Int,
-    // visuals
     title: String,
     xLabel: String,
     yLabel: String,
@@ -513,7 +546,6 @@ private fun BarChartPagedInternal(
     showLabel: Boolean,
     showYAxis: Boolean,
     onBarClick: ((Int, Double) -> Unit)?,
-    // scale/paging
     showTitle: Boolean,
     unifyYAxisAcrossPages: Boolean,
     yTickStep: Double?,
@@ -553,7 +585,6 @@ private fun BarChartPagedInternal(
         )
     }
 
-    // Compute max rounded value and effective tick step
     val maxRounded = yAxisRange.maxY
     val effectiveTickStep = yAxisRange.tickStep
 
@@ -591,7 +622,6 @@ private fun BarChartPagedInternal(
             if (yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.LEFT) {
                 VerticalAxisLabel(yLabel, modifier = Modifier.padding(bottom = xAxisOverflowDp))
             }
-            // Left fixed external Y-axis
             if (showYAxis && yAxisPosition == YAxisPosition.LEFT) {
                 FixedPagerYAxis(
                     maxY = maxRounded,
@@ -603,7 +633,6 @@ private fun BarChartPagedInternal(
                 )
             }
 
-            // Pager
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.weight(1f)
@@ -612,9 +641,6 @@ private fun BarChartPagedInternal(
                 val end = kotlin.math.min(start + pageSize, data.size)
                 val slice = data.subList(start, end)
 
-                // Render a normal BarChart page:
-                // - no inner scroll (windowSize = null)
-                // - maxY unified with the external axis
                 BarChart(
                     modifier = Modifier.fillMaxSize(),
                     data = slice,
@@ -633,13 +659,13 @@ private fun BarChartPagedInternal(
                         { i, v -> cb(start + i, v) } // rebase index to global
                     },
                     showLabel = showLabel,
-                    windowSize = null,                 // no inner scroll
+                    windowSize = null,
                     maxXTicksLimit = maxXTicksLimit,
                     xLabelAutoSkip = xLabelAutoSkip,
-                    showYAxis = false,                 // external axis handles it
+                    showYAxis = false,
                     yTickStep = effectiveTickStep,
                     showTitle = false,
-                    yAxisFixedWidth = 0.dp,            // no internal padding; external axis aligns with bars
+                    yAxisFixedWidth = 0.dp,
                     contentPadding = PaddingValues(bottom = xAxisOverflowDp - 4.dp, end = xLabelOverhangDp),
                     unit = unit,
                     barCornerRadiusFraction = barCornerRadiusFraction,
@@ -649,7 +675,6 @@ private fun BarChartPagedInternal(
                 )
             }
 
-            // Right fixed external Y-axis
             if (showYAxis && yAxisPosition == YAxisPosition.RIGHT) {
                 FixedPagerYAxis(
                     maxY = maxRounded,
@@ -698,7 +723,6 @@ private fun BarChartPagedInternal(
     }
 }
 
-// Function for fixed external Y-axis in paged bar chart
 @Composable
 private fun FixedPagerYAxis(
     maxY: Double,
@@ -725,7 +749,6 @@ private fun FixedPagerYAxis(
             fixedTickStep = step.toDouble(),
             paddingBottom = 10f
         )
-        // Call standalone y-axis drawing function
         if (referenceLines.isNotEmpty()) {
             ChartDraw.drawYAxisStandaloneWithReferenceHighlights(
                 drawScope = this,

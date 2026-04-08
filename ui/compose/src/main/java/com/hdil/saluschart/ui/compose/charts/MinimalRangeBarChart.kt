@@ -14,21 +14,8 @@ import com.hdil.saluschart.core.chart.model.BarCornerRadiusFractions
 import com.hdil.saluschart.core.chart.toRangeChartMarksByXGroup
 
 /**
- * 미니멀 범위 바 차트 - 위젯이나 스마트워치 등 작은 화면용
- * 범위 데이터를 컨테이너 범위 내에서 표시하며, 상단에 범위 텍스트 표시
- * 
- * @param modifier 모디파이어
- * @param data 차트 포인트 데이터 (같은 x값을 가진 포인트들이 min/max로 변환됨)
- * @param containerMin 컨테이너의 최소값 (전체 범위 시작)
- * @param containerMax 컨테이너의 최대값 (전체 범위 끝)
- * @param containerColor 컨테이너(배경) 바 색상
- * @param rangeColor 범위 바 색상
- * @param textColor 범위 텍스트 색상
- * @param width 차트 너비
- * @param height 차트 높이
- * @param padding 차트 주변 패딩
- * @param showRangeText 범위 텍스트를 표시할지 여부
- * @param cornerRadius 바의 모서리 둥글기
+ * Minimal range bar chart for small screens such as widgets or smartwatches.
+ * Marks with the same x value are grouped into min/max pairs and rendered as range bars.
  */
 @Composable
 fun MinimalRangeBarChart(

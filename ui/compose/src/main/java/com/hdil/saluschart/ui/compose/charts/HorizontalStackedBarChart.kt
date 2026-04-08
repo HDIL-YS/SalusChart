@@ -28,6 +28,17 @@ import com.hdil.saluschart.core.chart.chartDraw.LegendPosition
 import kotlin.math.abs
 import kotlin.math.max
 
+/**
+ * Data model for a single row in a [HorizontalStackedBarChartList].
+ *
+ * @param title Row label shown above the bar.
+ * @param unit Unit string appended to numeric values (e.g., "kcal", "g").
+ * @param total The aggregate value displayed as the row header.
+ * @param segments Ordered list of segment values that partition the bar.
+ * @param segmentLabels Optional per-segment labels; shown as a breakdown below the bar when non-empty
+ *   and equal in size to [segments].
+ * @param trackMax Optional maximum value for the track; defaults to [total] when null.
+ */
 data class HorizontalStackedBarRow(
     val title: String,
     val unit: String,
@@ -43,6 +54,25 @@ private data class TooltipUiState(
     val dotColor: Color
 )
 
+/**
+ * Renders a vertical list of horizontal stacked bar rows with an optional legend and tap tooltip.
+ *
+ * Each row visualises one [HorizontalStackedBarRow] as a pill-shaped track subdivided into
+ * colored segments. Tapping a segment shows a tooltip with the segment value; tapping elsewhere
+ * dismisses it.
+ *
+ * @param modifier Modifier applied to the outer container.
+ * @param title Chart title displayed at the top.
+ * @param datePeriodText Optional date-range subtitle displayed below the title.
+ * @param rows Ordered list of row data to render.
+ * @param colors Colors assigned to segments by index; cycles if fewer than the maximum segment count.
+ * @param barTrackColor Background track color for unfilled portions of each bar.
+ * @param onRowClick Optional callback invoked when a segment is tapped.
+ *   Receives (rowIndex, segmentIndex, segmentValue).
+ * @param showLegend Whether to display a legend.
+ * @param legendPosition Position of the legend relative to the chart content.
+ * @param legendLabels Labels for legend entries; must align with [colors] by index.
+ */
 @Composable
 fun HorizontalStackedBarChartList(
     modifier: Modifier = Modifier,

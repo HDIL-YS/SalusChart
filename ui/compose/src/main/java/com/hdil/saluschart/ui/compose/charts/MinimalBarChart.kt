@@ -18,13 +18,9 @@ import com.hdil.saluschart.core.chart.chartMath.ChartMath
 import com.hdil.saluschart.core.chart.model.BarCornerRadiusFractions
 
 /**
- * 미니멀 바 차트 - 위젯이나 스마트워치 등 작은 화면용
- * 축, 그리드, 레이블 없이 순수 바 차트만 표시
+ * Minimal bar chart for small screens such as widgets or smartwatches.
+ * Renders bars only — no axes, grid, or labels.
  *
- * @param modifier 모디파이어
- * @param data 바 차트 데이터 값들
- * @param color 바 색상
- * @param padding 차트 주변 패딩
  * @param referenceLines Optional reference lines drawn across the plot area.
  */
 @Composable
@@ -60,11 +56,9 @@ fun MinimalBarChart(
                 chartType = chartType
             )
 
-            // Store metrics for BarMarker
             chartMetrics = metrics
         }
 
-        // Visual bars (non-interactive) using BarMarker
         chartMetrics?.let { metrics ->
             ChartDraw.Bar.BarMarker(
                 data = data,

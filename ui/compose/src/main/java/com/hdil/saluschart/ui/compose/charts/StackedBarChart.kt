@@ -42,6 +42,51 @@ private fun ceilToStep(v: Double, step: Double): Double {
     return ceil(v / step) * step
 }
 
+/**
+ * Renders a stacked bar chart where each x-position displays multiple vertical segments
+ * stacked on top of each other.
+ *
+ * Input [data] is transformed into stacked marks via [toStackedChartMarks]; marks sharing
+ * the same `x` value form one stacked bar with one segment per mark. The chart supports
+ * three display modes:
+ * 1. Static (default): all bars are visible without scrolling or paging.
+ * 2. Scrolling: enabled when [windowSize] is non-null and smaller than the bar count.
+ * 3. Paging: enabled when [pageSize] is non-null and smaller than the bar count.
+ *
+ * Scrolling and paging are mutually exclusive.
+ *
+ * @param modifier Modifier applied to the chart container.
+ * @param data Raw chart marks. Marks sharing the same `x` form one stacked bar.
+ * @param segmentLabels Optional labels for each segment layer, used in the legend.
+ * @param xLabel Optional x-axis title.
+ * @param yLabel Optional y-axis title.
+ * @param title Chart title displayed when [showTitle] is true.
+ * @param colors Colors assigned to segment layers by index; cycles if fewer layers than colors.
+ * @param barWidthRatio Ratio of bar width to slot width (0–1 recommended).
+ * @param showLegend Whether to display the legend.
+ * @param legendPosition Position of the legend relative to the chart.
+ * @param yAxisPosition Side on which the Y-axis labels are drawn.
+ * @param interactionType Controls the tap hit area for bar/segment selection.
+ * @param onBarClick Optional callback invoked on tap; receives (barIndex, segmentIndex, value).
+ * @param referenceLines Optional horizontal reference lines drawn across the plot area.
+ * @param showYAxisHighlight Whether to highlight the Y-axis tick nearest the selected bar total.
+ * @param showTitle Whether to display [title].
+ * @param showYAxis Whether to draw the Y-axis and grid lines.
+ * @param showLabel Whether to draw value labels on each segment.
+ * @param xLabelAutoSkip If true, x-axis labels may be skipped to avoid overlap.
+ * @param maxXTicksLimit Maximum number of x-axis tick labels to display.
+ * @param minY Optional minimum Y value for the axis; auto-computed when null.
+ * @param maxY Optional maximum Y value for the axis; auto-computed when null.
+ * @param yTickStep Fixed y-axis tick step; auto-computed when null.
+ * @param unit Unit suffix appended to tooltip and value labels.
+ * @param windowSize Enables free horizontal scrolling when provided and smaller than bar count.
+ * @param contentPadding Padding applied around the chart content in scroll/page mode.
+ * @param pageSize Enables paging when provided; mutually exclusive with [windowSize].
+ * @param unifyYAxisAcrossPages Whether all pages share the same Y-axis scale in paging mode.
+ * @param initialPageIndex Initial page index for paging mode; defaults to last page when null.
+ * @param yAxisFixedWidth Width reserved for the Y-axis pane in scroll/page mode.
+ * @param tooltipColor Color of the tooltip indicator dot.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun StackedBarChart(
@@ -59,7 +104,7 @@ fun StackedBarChart(
         Color(0xFFE91E63),
         Color(0xFFFFEB3B),
     ),
-    barWidthRatio: Float = 0.6f, // Ratio of bar width to space width (바 너비 / 한 칸 너비)
+    barWidthRatio: Float = 0.6f,
     showLegend: Boolean = false,
     legendPosition: LegendPosition = LegendPosition.BOTTOM,
     yAxisPosition: YAxisPosition = YAxisPosition.LEFT,
@@ -97,10 +142,6 @@ fun StackedBarChart(
     val chartType = ChartType.STACKED_BAR
 
     // Transform ChartMark to StackedChartMark (memoized)
-    // TODO: 현재 ChartMark에서 StackedChartMark로 변환하는 과정 필수, 이에 input을 항상 List<ChartMark>로 고정
-    // 이는 StackedChartMark가 한 개의 x값에 대응하는 y value가 여러 개 (list) 포함되어 있기 때문
-    // 모든 chart type은 ChartMark를 input으로 통일하기 때문에, stacked bar chart에서 StackedChartMark를 사용하려면 .toStackedChartMarks() 를 통한 변환 필요
-    // (HealthData -> TemporalDataSet -> Transform -> ChartMark 형태 유지)
     val stackedData = remember(data) {
         data.toStackedChartMarks(
             segmentOrdering = { group: List<ChartMark> -> group.sortedByDescending { it.y } }

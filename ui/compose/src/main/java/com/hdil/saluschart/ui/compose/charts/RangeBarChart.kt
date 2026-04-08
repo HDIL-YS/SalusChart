@@ -122,6 +122,13 @@ import kotlin.math.min
  * @throws IllegalArgumentException if both [windowSize] and [pageSize] are provided.
  */
 
+/**
+ * A single entry in a [RangeBarChart] legend.
+ *
+ * @param label Text label for this legend entry.
+ * @param color Color of the legend indicator.
+ * @param shape Shape of the legend indicator; defaults to [LegendShape.Dot].
+ */
 data class LegendItem(
     val label: String,
     val color: Color,
@@ -247,6 +254,46 @@ fun RangeBarChart(
         )
 }
 
+/**
+ * Convenience overload of [RangeBarChart] that accepts raw [ChartMark] data.
+ *
+ * Marks sharing the same `x` value are automatically grouped into a [RangeChartMark] by selecting
+ * the minimum and maximum `y` values within each group, then delegates to the primary overload.
+ *
+ * @param modifier Modifier applied to the chart container.
+ * @param data Raw chart marks. Marks with the same `x` are merged into a single range bar.
+ * @param xLabel Optional x-axis title.
+ * @param yLabel Optional y-axis title.
+ * @param title Chart title shown when [showTitle] is true.
+ * @param barColor Color used to draw range bars.
+ * @param barWidthRatio Ratio of bar width to slot width (0–1 recommended).
+ * @param yAxisPosition Side on which the Y-axis is drawn.
+ * @param interactionType Controls the tap hit area for bar selection.
+ * @param onBarClick Callback invoked when a bar is selected.
+ * @param showTitle Whether to display [title].
+ * @param showYAxis Whether to draw the Y-axis.
+ * @param xLabelAutoSkip Whether to skip overlapping x-axis tick labels.
+ * @param maxXTicksLimit Maximum number of x-axis tick labels to display.
+ * @param yTickStep Fixed tick step for the y-axis; auto-computed when null.
+ * @param unit Unit suffix for tooltips/values.
+ * @param pointValues Optional overlay points per bar index.
+ * @param pointColor Color of overlay points.
+ * @param pointRadius Radius of overlay points.
+ * @param barCornerRadiusFraction Uniform corner radius fraction for bars.
+ * @param barCornerRadiusFractions Per-corner radius configuration; overrides [barCornerRadiusFraction].
+ * @param roundTopOnly If true, only the top corners of bars are rounded.
+ * @param windowSize Enables horizontal scrolling when provided and smaller than `data.size`.
+ * @param contentPadding Padding around the chart content.
+ * @param pageSize Enables paging when provided; mutually exclusive with [windowSize].
+ * @param initialPageIndex Initial page for paging mode; defaults to the last page when null.
+ * @param yAxisFixedWidth Width reserved for the Y-axis pane.
+ * @param referenceLines Optional horizontal reference lines.
+ * @param showYAxisHighlight Whether to highlight the Y-axis value corresponding to the selected bar.
+ * @param tooltipColor Color of the tooltip indicator.
+ * @param legendItems Legend entries shown when [showLegend] is true.
+ * @param showLegend Whether to display the legend.
+ * @param legendPosition Position of the legend relative to the chart.
+ */
 @JvmName("RangeBarChartChartMarks")
 @Composable
 fun RangeBarChart(

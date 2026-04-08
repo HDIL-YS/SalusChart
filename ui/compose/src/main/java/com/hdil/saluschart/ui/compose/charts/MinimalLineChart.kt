@@ -21,15 +21,9 @@ import androidx.compose.ui.unit.dp
 import com.hdil.saluschart.core.chart.chartMath.ChartMath
 
 /**
- * 미니멀 라인 차트 (스파크라인) - 위젯이나 스마트워치 등 작은 화면용
- * 축, 그리드, 레이블 없이 순수 라인만 표시
+ * Minimal line (sparkline) chart for small screens such as widgets or smartwatches.
+ * Renders the line only — no axes, grid, or labels.
  *
- * @param modifier 모디파이어
- * @param data 라인 차트 데이터 포인트들
- * @param color 라인 색상
- * @param strokeWidth 라인 두께
- * @param padding 차트 주변 패딩
- * @param showPoints 끝점을 원으로 표시할지 여부
  * @param referenceLines Optional reference lines drawn across the plot area.
  */
 @Composable
@@ -62,7 +56,6 @@ fun MinimalLineChart(
             )
             val points = ChartMath.Line.mapLineToCanvasPoints(data, size, metrics)
 
-            // Store metrics for ReferenceLine
             chartMetrics = metrics
 
             LineChartDraw.drawLine(this, points, color, strokeWidth)

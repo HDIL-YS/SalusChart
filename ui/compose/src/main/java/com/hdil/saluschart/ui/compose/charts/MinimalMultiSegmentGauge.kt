@@ -15,11 +15,34 @@ import androidx.compose.ui.unit.dp
 import kotlin.math.max
 import kotlin.math.min
 
+/**
+ * A single colored zone in a [MinimalMultiSegmentGauge].
+ *
+ * @param fraction Proportional width of this segment; all fractions are normalized against their sum.
+ * @param color Fill color of this segment.
+ */
 data class MinimalGaugeSegment(
     val fraction: Float, // portion of the bar, sum should be ~1.0
     val color: Color
 )
 
+/**
+ * Renders a compact horizontal multi-segment gauge bar with a floating capsule marker.
+ *
+ * The bar is divided into proportional colored zones defined by [segments]. A rounded-rectangle
+ * marker is drawn at the horizontal position specified by [markerRatio], constrained to remain
+ * within the segment it falls inside.
+ *
+ * @param modifier Modifier applied to the Canvas.
+ * @param segments Ordered list of gauge segments that partition the bar from left to right.
+ * @param markerRatio Position of the marker along the gauge (0 = left edge, 1 = right edge).
+ * @param barHeight Height of the gauge bar.
+ * @param cornerRadius Corner radius of the gauge bar; defaults to fully rounded (pill).
+ * @param markerWidth Requested width of the marker capsule; clamped to the containing segment width.
+ * @param markerHeight Height of the marker capsule.
+ * @param markerColor Fill color of the marker capsule.
+ * @param markerShadowAlpha Alpha of the drop shadow rendered below the marker.
+ */
 @Composable
 fun MinimalMultiSegmentGauge(
     modifier: Modifier = Modifier,
@@ -137,6 +160,14 @@ fun MinimalMultiSegmentGauge(
     }
 }
 
+/**
+ * Returns the segment color that contains the given [ratio] position.
+ *
+ * @param ratio Normalized position along the gauge (0–1).
+ * @param segments Ordered list of gauge segments.
+ * @param fallback Color returned when [segments] is empty.
+ * @return The [Color] of the segment at [ratio], or [fallback] if [segments] is empty.
+ */
 fun markerColorForRatio(
     ratio: Float,
     segments: List<MinimalGaugeSegment>,

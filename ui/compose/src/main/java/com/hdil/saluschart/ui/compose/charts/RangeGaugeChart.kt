@@ -23,6 +23,33 @@ import androidx.compose.ui.unit.sp
 import kotlin.math.max
 import kotlin.math.min
 
+/**
+ * Renders a card-style range gauge that visualises a highlighted range on a linear scale and
+ * marks the most recent value with a dotted indicator.
+ *
+ * The gauge bar spans [minValue] to [maxValue]. The segment between [rangeStart] and [rangeEnd]
+ * is filled with [rangeColor]. A column of white dots at [recentValue]'s position indicates the
+ * current reading.
+ *
+ * @param modifier Modifier applied to the Surface card.
+ * @param cornerRadius Corner radius of the card.
+ * @param minValue Minimum value of the gauge scale.
+ * @param maxValue Maximum value of the gauge scale.
+ * @param rangeStart Start of the highlighted range; clamped to [minValue]..[maxValue].
+ * @param rangeEnd End of the highlighted range; clamped to [minValue]..[maxValue].
+ * @param recentValue Most recent reading to mark on the gauge; clamped to [minValue]..[maxValue].
+ * @param unit Unit string appended to values (e.g., "bpm").
+ * @param recentLabel Subtitle text shown below the gauge (e.g., "Latest recording 3:40 PM").
+ * @param trackColor Background track color for the gauge bar.
+ * @param rangeColor Fill color of the highlighted range segment.
+ * @param textGray Color used for the min/max boundary labels.
+ * @param barHeight Height of the gauge bar.
+ * @param titleFontSize Font size in sp for the range title (e.g., "60–100 bpm").
+ * @param bottomFontSize Font size in sp for the min/max boundary labels.
+ * @param recentValueFontSize Font size in sp for the recent-value label.
+ * @param subtitleFontSize Font size in sp for [recentLabel].
+ * @param markerDotCount Number of white dots drawn in the marker column.
+ */
 @Composable
 fun RangeGaugeChart(
     modifier: Modifier = Modifier,
@@ -67,7 +94,7 @@ fun RangeGaugeChart(
     }
 
     val titleText = "${trim0(r0)}–${trim0(r1)} $unit"
-    val markerT = ratioOf(rv) // ✅ recentValue 위치 비율 (0..1)
+    val markerT = ratioOf(rv)
 
     Surface(
         modifier = modifier,
@@ -94,7 +121,7 @@ fun RangeGaugeChart(
 
             BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                 val fullW = maxWidth
-                val textHalf = 12.dp // "75" 대충 절반 폭
+                val textHalf = 12.dp
 
                 Box(modifier = Modifier.fillMaxWidth()) {
                     // Gauge bar
@@ -137,7 +164,6 @@ fun RangeGaugeChart(
                         }
                     }
 
-                    // ✅ 75 aligned to marker
                     Text(
                         text = trim0(rv),
                         color = rangeColor,
@@ -147,7 +173,7 @@ fun RangeGaugeChart(
                             .align(Alignment.BottomStart)
                             .offset(
                                 x = (fullW * markerT) - textHalf,
-                                y = (barHeight + 6.dp) // bar 아래 살짝
+                                y = (barHeight + 6.dp)
                             )
                     )
                 }
@@ -155,7 +181,6 @@ fun RangeGaugeChart(
 
             Spacer(Modifier.height(10.dp))
 
-            // ✅ min/max는 좌우로만
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically

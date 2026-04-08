@@ -60,7 +60,12 @@ import kotlin.math.roundToInt
 
 
 /**
- * 캘린더 차트에 표시할 데이터 모델
+ * Data model for a single calendar day entry.
+ *
+ * @param date The calendar date for this entry.
+ * @param value Numeric value associated with the date, used to size or color the marker.
+ * @param color Optional override color for the day's bubble marker.
+ * @param rings Optional list of activity ring progress marks, used when [CellMarkerType.MINI_RINGS] is active.
  */
 data class CalendarEntry(
     val date: LocalDate,
@@ -70,8 +75,8 @@ data class CalendarEntry(
 )
 
 enum class BubbleType {
-    CIRCLE, // 단일 월 데이터
-    RECTANGLE // 여러 월 데이터
+    CIRCLE,
+    RECTANGLE
 }
 
 enum class CellMarkerType {
@@ -80,7 +85,16 @@ enum class CellMarkerType {
 }
 
 /**
- * 캘린더 차트를 표시하는 Composable 함수
+ * Renders a single-month calendar chart with per-day value markers.
+ *
+ * @param modifier Modifier applied to the chart container.
+ * @param entries List of [CalendarEntry] values to display.
+ * @param yearMonth The month to display; defaults to the current month.
+ * @param markerType Marker style for each day cell: [CellMarkerType.BUBBLE] or [CellMarkerType.MINI_RINGS].
+ * @param bubbleType Shape of the bubble marker: [BubbleType.CIRCLE] or [BubbleType.RECTANGLE].
+ * @param maxBubbleSize Maximum bubble radius in dp.
+ * @param minBubbleSize Minimum bubble radius in dp.
+ * @param color Default marker color; overridden per-entry by [CalendarEntry.color] when set.
  */
 @Composable
 fun CalendarChart(
@@ -93,7 +107,6 @@ fun CalendarChart(
     minBubbleSize: Float = 6f,
     color: Color = MaterialTheme.colorScheme.primary,
 ) {
-    // 단일 월 데이터만 있으면 기존 CalendarChart 로직 사용
     SingleMonthCalendarChart(
         modifier = modifier,
         entries = entries,
@@ -107,7 +120,16 @@ fun CalendarChart(
 }
 
 /**
- * 단일 월을 표시하는 캘린더 차트 (기존 CalendarChart 로직)
+ * Renders a single-month calendar grid with day-cell markers and an optional tap tooltip.
+ *
+ * @param modifier Modifier applied to the chart container.
+ * @param entries List of [CalendarEntry] values to display.
+ * @param yearMonth The month to render.
+ * @param markerType Marker style for each day cell.
+ * @param bubbleType Shape of bubble markers when [CellMarkerType.BUBBLE] is active.
+ * @param maxBubbleSize Maximum bubble radius in dp.
+ * @param minBubbleSize Minimum bubble radius in dp.
+ * @param color Default marker color.
  */
 @Composable
 fun SingleMonthCalendarChart(
@@ -347,9 +369,6 @@ private fun MultiLineTooltip(
     }
 }
 
-/**
- * 개별 캘린더 셀을 Composable로 구현
- */
 @Composable
 private fun CalendarCellComposable(
     modifier: Modifier = Modifier,
@@ -499,7 +518,21 @@ private fun CalendarCellComposable(
 }
 
 /**
- * 여러 월을 표시하는 캘린더 차트
+ * Renders a horizontally pageable calendar chart spanning multiple months.
+ *
+ * The pager is centered on the current month at first composition and notifies callers
+ * whenever the visible month changes.
+ *
+ * @param modifier Modifier applied to the chart container.
+ * @param initialYearMonth The month used as the origin for computing page offsets.
+ * @param entriesForMonth Callback that supplies [CalendarEntry] data for a given [YearMonth].
+ * @param bubbleType Shape of bubble markers.
+ * @param markerType Marker style for each day cell.
+ * @param maxBubbleSize Maximum bubble radius in dp.
+ * @param minBubbleSize Minimum bubble radius in dp.
+ * @param color Default marker color.
+ * @param virtualSpanMonths Total number of pages in the virtual pager (centered on today).
+ * @param onMonthChanged Optional callback invoked whenever the visible month changes.
  */
 @Composable
 fun PagedCalendarChart(

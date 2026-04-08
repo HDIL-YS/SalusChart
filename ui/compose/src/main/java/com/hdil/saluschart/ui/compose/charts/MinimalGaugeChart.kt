@@ -25,17 +25,8 @@ import com.hdil.saluschart.core.chart.RangeChartMark
 import com.hdil.saluschart.core.chart.chartDraw.ChartDraw
 
 /**
- * 미니멀 범위 바 차트 - 위젯이나 스마트워치 등 작은 화면용
- * 범위 데이터를 컨테이너 범위 내에서 표시하며, 상단에 범위 텍스트 표시
- * 
- * @param modifier 모디파이어
- * @param data 범위 차트 데이터 (yMin, yMax 포함)
- * @param containerMin 컨테이너의 최소값 (전체 범위 시작)
- * @param containerMax 컨테이너의 최대값 (전체 범위 끝)
- * @param containerColor 컨테이너(배경) 바 색상
- * @param rangeColor 범위 바 색상
- * @param textColor 범위 텍스트 색상
- * @param showRangeText 범위 텍스트를 표시할지 여부
+ * Minimal gauge chart for small screens such as widgets or smartwatches.
+ * Displays a range bar within the container bounds with optional range text above.
  */
 @Composable
 fun MinimalGaugeChart(
@@ -48,7 +39,6 @@ fun MinimalGaugeChart(
     textColor: Color = Color.Black,
     showRangeText: Boolean = true,
 ) {
-    // 데이터 범위가 컨테이너 범위를 벗어나지 않도록 클램핑
     val clampedDataMin = data.minPoint.y.coerceIn(containerMin, containerMax)
     val clampedDataMax = data.maxPoint.y.coerceIn(containerMin, containerMax)
 
@@ -56,7 +46,6 @@ fun MinimalGaugeChart(
         modifier = modifier.padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 범위 텍스트 표시
         if (showRangeText) {
             ChartDraw.Gauge.RangeText(
                 dataMin = clampedDataMin.toFloat(),
@@ -65,7 +54,6 @@ fun MinimalGaugeChart(
             )
         }
 
-        // 게이지 바 컴포저블
         ChartDraw.Gauge.GaugeBar(
             dataMin = clampedDataMin.toFloat(),
             dataMax = clampedDataMax.toFloat(),

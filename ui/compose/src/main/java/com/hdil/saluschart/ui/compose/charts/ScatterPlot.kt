@@ -57,6 +57,52 @@ import com.hdil.saluschart.core.chart.chartDraw.ReferenceLine
 import com.hdil.saluschart.core.chart.chartDraw.YAxisPosition
 import com.hdil.saluschart.core.chart.chartMath.ChartMath
 
+/**
+ * Displays a scatter plot for the provided data points, with support for interactive tooltips,
+ * optional horizontal scrolling, paged navigation, a configurable Y-axis, reference lines,
+ * and a legend.
+ *
+ * Two interaction modes are available: [InteractionType.Scatter.POINT] selects individual points,
+ * while [InteractionType.Scatter.TOUCH_AREA] groups all points sharing the same X value under a
+ * single wide tap strip and shows a combined tooltip.
+ *
+ * When [pageSize] is set and the data exceeds that value, the chart automatically switches to a
+ * horizontally pageable layout with a shared Y-axis across all pages.
+ *
+ * @param modifier Modifier applied to the outermost layout container.
+ * @param data List of [ChartMark] entries to render as scatter points. Returns early if empty.
+ * @param xLabel Text label displayed below the X-axis.
+ * @param yLabel Text label displayed alongside the Y-axis.
+ * @param title Chart title shown above the chart area when [showTitle] is true.
+ * @param pointColor Fill color applied to all scatter points.
+ * @param pointType Shape of each scatter point (e.g. [PointType.Circle]).
+ * @param pointSize Diameter of each scatter point in [Dp].
+ * @param minY Optional lower bound for the Y-axis; computed from data when null.
+ * @param maxY Optional upper bound for the Y-axis; computed from data when null.
+ * @param tooltipTextSize Text size in pixels for the tooltip label.
+ * @param yAxisPosition Side on which the Y-axis is drawn ([YAxisPosition.LEFT] or [YAxisPosition.RIGHT]).
+ * @param interactionType Controls point tap behaviour: [InteractionType.Scatter.POINT] for individual
+ *   point selection; [InteractionType.Scatter.TOUCH_AREA] for column-wide selection with a combined tooltip.
+ * @param referenceLines Horizontal reference lines drawn across the plot area.
+ * @param showYAxisHighlight When true, reference-line values are highlighted on the Y-axis.
+ * @param showTitle Whether to render the [title] above the chart.
+ * @param showYAxis Whether to draw the Y-axis line and tick labels.
+ * @param xLabelAutoSkip When true, overlapping X-axis tick labels are automatically skipped.
+ * @param maxXTicksLimit Optional cap on the number of X-axis tick labels rendered.
+ * @param yTickStep Fixed interval between Y-axis grid lines; auto-calculated when null.
+ * @param unit Unit string appended to tooltip values (e.g. "kg", "bpm").
+ * @param windowSize Number of data points visible at once in free-scroll mode; enables horizontal
+ *   scrolling when smaller than the total data size. Mutually exclusive with [pageSize].
+ * @param contentPadding Padding applied around the chart content area.
+ * @param pageSize Number of data points shown per page; enables the pager when data exceeds this
+ *   value. Mutually exclusive with [windowSize].
+ * @param initialPageIndex Page to display first in paged mode; defaults to the last page when null.
+ * @param yAxisFixedWidth Width reserved for the external Y-axis pane in scroll mode.
+ * @param showLegend Whether to display a legend entry near the chart.
+ * @param legendPosition Where to place the legend relative to the chart.
+ * @param legendLabel Text shown in the legend for this data series.
+ * @param tooltipColor Background color of tooltip bubbles; defaults to [pointColor].
+ */
 @Composable
 fun ScatterPlot(
     modifier: Modifier = Modifier,
@@ -67,26 +113,24 @@ fun ScatterPlot(
     pointColor: Color = com.hdil.saluschart.ui.theme.ChartColor.Default,
     pointType: PointType = PointType.Circle,
     pointSize: Dp = 8.dp,
-    minY: Double? = null, // Minimum Y value for chart
-    maxY: Double? = null, // Maximum Y value for chart
+    minY: Double? = null,
+    maxY: Double? = null,
     tooltipTextSize: Float = 32f,
     yAxisPosition: YAxisPosition = YAxisPosition.LEFT,
     interactionType: InteractionType.Scatter = InteractionType.Scatter.POINT,
     referenceLines: List<ReferenceLineSpec> = emptyList(),
     showYAxisHighlight: Boolean = false,
-    // Display
     showTitle: Boolean = true,
     showYAxis: Boolean = true,
-    xLabelAutoSkip: Boolean = true, // Automatically skip labels if they overlap
-    maxXTicksLimit: Int? = null, // Maximum number of x-axis labels to display
-    yTickStep: Double? = null, // y-axis grid tick step (automatically calculated if null)
+    xLabelAutoSkip: Boolean = true,
+    maxXTicksLimit: Int? = null,
+    yTickStep: Double? = null,
     unit: String = "",
-    // Scroll/Page
-    windowSize: Int? = null, // number of visible items in scroll window (not null enables scrolling)
-    contentPadding: PaddingValues = PaddingValues(16.dp), // Free-scroll paddings
-    pageSize: Int? = null, // number of items per page (not null enables paging)
-    initialPageIndex: Int? = null, // initial page to show (last page if null)
-    yAxisFixedWidth: Dp = 30.dp, // Padding between the chart and the y-axis
+    windowSize: Int? = null,
+    contentPadding: PaddingValues = PaddingValues(16.dp),
+    pageSize: Int? = null,
+    initialPageIndex: Int? = null,
+    yAxisFixedWidth: Dp = 30.dp,
     showLegend: Boolean = false,
     legendPosition: LegendPosition = LegendPosition.BOTTOM,
     legendLabel: String = "",
@@ -100,11 +144,7 @@ fun ScatterPlot(
     }
 
     val chartType = ChartType.SCATTERPLOT
-
-    // Compute effective page size (0 = off)
     val requestedPageSize = (pageSize ?: 0).coerceAtLeast(0)
-
-    // Enable paging if pageSize is provided and data exceeds page size
     val enablePaging = requestedPageSize > 0 && data.size > requestedPageSize
 
     if (enablePaging) {
@@ -112,7 +152,6 @@ fun ScatterPlot(
             modifier = modifier,
             data = data,
             pageSize = requestedPageSize,
-            // visuals
             title = title,
             xLabel = xLabel,
             yLabel = yLabel,
@@ -123,7 +162,6 @@ fun ScatterPlot(
             interactionType = interactionType,
             yAxisPosition = yAxisPosition,
             showYAxis = showYAxis,
-            // scale/paging
             showTitle = showTitle,
             outerPadding = contentPadding,
             yTickStep = yTickStep,
@@ -148,8 +186,7 @@ fun ScatterPlot(
     val isFixedYAxis = showYAxis && useScrolling
     val scrollState = rememberScrollState()
 
-    // Use the same approach as BarChart and LineChart for x-axis labels
-    // Remove duplicate labels while preserving order for scatter plots with multiple points per x-value
+    // Deduplicate labels: scatter plots may have multiple points sharing the same x-value
     val xLabels = data.map { it.label ?: it.x.toString() }.distinct()
     val yValues = data.map { it.y }
 
@@ -182,7 +219,6 @@ fun ScatterPlot(
                 if (yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.LEFT) {
                     VerticalAxisLabel(yLabel)
                 }
-                // Left fixed axis pane
                 if (isFixedYAxis && yAxisPosition == YAxisPosition.LEFT) {
                     Canvas(
                         modifier = Modifier
@@ -205,8 +241,6 @@ fun ScatterPlot(
                     }
                 }
 
-                // Calculate padding when Y-axis is hidden (external axis handles it), when it's a fixed axis on that side,
-                // or when a vertical axis label (yLabel) is already providing visual separation on that side.
                 val hasLeftLabel  = yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.LEFT
                 val hasRightLabel = yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.RIGHT
                 val startPad = if (!showYAxis || (isFixedYAxis && yAxisPosition == YAxisPosition.LEFT) || hasLeftLabel) 0.dp else marginHorizontal
@@ -255,7 +289,7 @@ fun ScatterPlot(
                         if (showYAxis && !isFixedYAxis) {
                             ChartDraw.drawYAxis(this, metrics, yAxisPosition)
                         }
-                        // X-axis labels are drawn in Bar style with center alignment (bar center) positioning
+                        // X-axis labels use bar-style center alignment to align with point columns
                         ChartDraw.Bar.drawBarXAxisLabels(
                             ctx = drawContext,
                             labels = xLabels,
@@ -265,10 +299,8 @@ fun ScatterPlot(
                         )
                     }
 
-                    // Conditional interaction based on interactionType parameter
                     when (interactionType) {
                         InteractionType.Scatter.POINT -> {
-                            // Direct point touch: use single selection, reset set selection
                             selectedIndices = null
                             ChartDraw.Scatter.PointMarker(
                                 data = data,
@@ -291,10 +323,8 @@ fun ScatterPlot(
                         }
 
                         InteractionType.Scatter.TOUCH_AREA -> {
-                            // Wide touch area: lay full-height strips for each category (unique x) to increase touch sensitivity
                             val metrics = chartMetrics
                             if (metrics != null && canvasPoints.isNotEmpty()) {
-                                // Map unique x values (categories) and indices
                                 val categoryData = remember(data) {
                                     val uniqueXs = data.map { it.x }.distinct().sorted()
                                     val catCount = uniqueXs.size
@@ -314,13 +344,12 @@ fun ScatterPlot(
                                 }
                                 val (uniqueXs, catCount, catMarks) = categoryData
 
-                                // Precompute index map per X value for fast lookup on click
+                                // Precompute per-X index map for O(1) category lookup on tap
                                 val xToIndicesMap = remember(data) {
                                     data.indices.groupBy { data[it].x }
                                         .mapValues { it.value.toSet() }
                                 }
 
-                                // 1) Touch area bars (transparent)
                                 ChartDraw.Bar.BarMarker(
                                     data = catMarks,
                                     minValues = List(catCount) { metrics.minY },
@@ -330,7 +359,6 @@ fun ScatterPlot(
                                     barWidthRatio = 1.0f,
                                     interactive = true,
                                     onBarClick = { idx, _ ->
-                                        // Set of all points (1:N) in same category (same x)
                                         val ux = uniqueXs.getOrNull(idx)
                                         val indicesInCat: Set<Int> = ux?.let { xToIndicesMap[it] } ?: emptySet()
                                         selectedPointIndex = null
@@ -346,7 +374,6 @@ fun ScatterPlot(
                                     unit = unit
                                 )
 
-                                // 2) Draw points ONLY (no tooltips from PointMarker)
                                 ChartDraw.Scatter.PointMarker(
                                     data = data,
                                     points = canvasPoints,
@@ -358,7 +385,7 @@ fun ScatterPlot(
                                     pointType = pointType,
                                     chartType = chartType,
                                     showTooltipForIndex = null,
-                                    showTooltipForIndices = null,   // <<< turn OFF built-in multi-tooltips
+                                    showTooltipForIndices = null, // built-in multi-tooltips disabled; combined tooltip rendered below
                                     pointRadius = pointSize,
                                     innerRadius = 0.dp,
                                     interactive = false,
@@ -366,7 +393,7 @@ fun ScatterPlot(
                                     unit = unit,
                                 )
 
-                                // 3) Single combined tooltip over the selected x (high zIndex so it renders above reference lines)
+                                // Combined tooltip rendered at high zIndex to appear above reference lines
                                 if (!selectedIndices.isNullOrEmpty()) {
                                     Box(modifier = Modifier.fillMaxSize().zIndex(999f)) {
                                         ScatterCombinedTooltip(
@@ -380,7 +407,7 @@ fun ScatterPlot(
                                     }
                                 }
                             } else {
-                                // Fallback: if metrics not ready yet, render default non-interactive points
+                                // Metrics not yet available; render non-interactive points as a fallback
                                 ChartDraw.Scatter.PointMarker(
                                     data = data,
                                     points = canvasPoints,
@@ -403,7 +430,6 @@ fun ScatterPlot(
                         }
                     }
 
-                    // Draw reference lines
                     if (referenceLines.isNotEmpty()) {
                         chartMetrics?.let { metrics ->
                             ReferenceLine.ReferenceLines(
@@ -418,7 +444,6 @@ fun ScatterPlot(
                     }
                 }
 
-                // Right fixed axis pane
                 if (isFixedYAxis && yAxisPosition == YAxisPosition.RIGHT) {
                     Canvas(
                         modifier = Modifier
@@ -564,14 +589,12 @@ private fun ScatterCombinedTooltip(
     }
 }
 
-// Function for paged scatter plot
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ScatterPlotPagedInternal(
     modifier: Modifier,
     data: List<ChartMark>,
     pageSize: Int,
-    // visuals
     title: String,
     xLabel: String,
     yLabel: String,
@@ -582,7 +605,6 @@ private fun ScatterPlotPagedInternal(
     interactionType: InteractionType.Scatter,
     yAxisPosition: YAxisPosition,
     showYAxis: Boolean,
-    // scale/paging
     showTitle: Boolean,
     yTickStep: Double?,
     initialPageIndex: Int?,
@@ -618,7 +640,6 @@ private fun ScatterPlotPagedInternal(
         )
     }
 
-    // Compute max rounded value and effective tick step
     val maxRounded = yAxisRange.maxY
     val effectiveTickStep = yAxisRange.tickStep
 
@@ -632,7 +653,6 @@ private fun ScatterPlotPagedInternal(
             if (yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.LEFT) {
                 VerticalAxisLabel(yLabel)
             }
-            // Left fixed external Y-axis
             if (showYAxis && yAxisPosition == YAxisPosition.LEFT) {
                 FixedPagerYAxisScatter(
                     maxY = maxRounded,
@@ -643,7 +663,6 @@ private fun ScatterPlotPagedInternal(
                 )
             }
 
-            // Pager
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.weight(1f)
@@ -652,9 +671,6 @@ private fun ScatterPlotPagedInternal(
                 val end = kotlin.math.min(start + pageSize, data.size)
                 val slice = data.subList(start, end)
 
-                // Render a normal ScatterPlot page:
-                // - no inner scroll (windowSize = null)
-                // - maxY unified with the external axis
                 ScatterPlot(
                     modifier = Modifier.fillMaxSize(),
                     data = slice,
@@ -669,25 +685,24 @@ private fun ScatterPlotPagedInternal(
                     tooltipTextSize = tooltipTextSize,
                     yAxisPosition = yAxisPosition,
                     interactionType = interactionType,
-                    showTitle = false,                    // external axis handles it
-                    showYAxis = false,                    // external axis handles it
+                    showTitle = false,
+                    showYAxis = false,
                     maxXTicksLimit = maxXTicksLimit,
                     xLabelAutoSkip = xLabelAutoSkip,
-                    yTickStep = effectiveTickStep,        // keep grid aligned with external axis
-                    windowSize = null,                    // no inner scroll
+                    yTickStep = effectiveTickStep,
+                    windowSize = null,
                     contentPadding = PaddingValues(
                         start = if (yAxisPosition == YAxisPosition.LEFT) 0.dp else 0.dp,
                         end = if (yAxisPosition == YAxisPosition.RIGHT) 0.dp else 0.dp,
                         top = 0.dp,
                         bottom = 0.dp
                     ),
-                    pageSize = null,                      // don't recurse
+                    pageSize = null,
                     unit = unit,
                     tooltipColor = tooltipColor,
                 )
             }
 
-            // Right fixed external Y-axis
             if (showYAxis && yAxisPosition == YAxisPosition.RIGHT) {
                 FixedPagerYAxisScatter(
                     maxY = maxRounded,
@@ -737,7 +752,6 @@ private fun ScatterPlotPagedInternal(
     }
 }
 
-// Function for fixed external Y-axis in paged scatter plot
 @Composable
 private fun FixedPagerYAxisScatter(
     maxY: Double,
@@ -761,7 +775,6 @@ private fun FixedPagerYAxisScatter(
             fixedTickStep = step,
             paddingBottom = 20f
         )
-        // Call standalone y-axis drawing function
         if (referenceLines.isNotEmpty()) {
             ChartDraw.drawYAxisStandaloneWithReferenceHighlights(
                 drawScope = this, metrics = m, yAxisPosition = yAxisPosition,

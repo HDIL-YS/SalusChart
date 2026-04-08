@@ -16,6 +16,23 @@ import kotlin.math.min
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+/**
+ * Renders a compact set of concentric activity rings, similar to the Apple Watch Activity display.
+ *
+ * Each ring corresponds to one [ProgressChartMark] and fills proportionally to
+ * `current / max`. Progress beyond 100 % wraps up to [maxLaps] full rotations.
+ *
+ * @param modifier Modifier applied to the Canvas.
+ * @param rings Ordered list of progress marks; index 0 is the outermost ring.
+ * @param colors Colors for each ring by index; cycles if fewer than [rings] size.
+ * @param strokeWidth Ring stroke width in pixels.
+ * @param maxLaps Maximum number of full rotations allowed (e.g., 2 = up to 200 %).
+ * @param trackAlpha Alpha applied to the background track arc of each ring.
+ * @param gapRatio Gap between rings as a fraction of [strokeWidth].
+ * @param startAngle Starting angle in degrees (−90 = 12 o'clock).
+ * @param shadowAlpha Alpha of the drop shadow drawn behind each filled arc.
+ * @param shadowExtraWidthRatio Extra width of the shadow stroke relative to [strokeWidth].
+ */
 @Composable
 fun MiniActivityRings(
     modifier: Modifier = Modifier,

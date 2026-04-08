@@ -42,7 +42,27 @@ import kotlin.math.max
 import kotlin.math.min
 
 /**
- * Apple-Health-style Sleep Stage chart.
+ * Renders an Apple Health-style sleep stage chart displaying a [SleepSession] as
+ * colored horizontal capsules on a grid of four stage rows (Deep, Core, REM, Awake).
+ *
+ * Consecutive stages of the same type are merged before rendering. Gradient connectors
+ * bridge transitions between adjacent capsules. Tapping a capsule shows a tooltip;
+ * tapping the same capsule again dismisses it.
+ *
+ * @param modifier Modifier applied to the chart container.
+ * @param sleepSession Sleep session data containing the ordered list of [SleepStage] entries.
+ * @param title Chart title displayed when [showTitle] is true.
+ * @param showLabels Unused reserved parameter for future label control.
+ * @param showXAxis Whether to display the x-axis time labels below the chart.
+ * @param onStageClick Optional callback invoked when a capsule is tapped; receives (stageIndex, stageLabel).
+ * @param barHeightRatio Height of each capsule as a fraction of the row height.
+ * @param yAxisPosition Side on which the stage-name labels are drawn.
+ * @param contentPadding Padding applied around the entire chart.
+ * @param showTitle Whether to display [title].
+ * @param showYAxis Whether to display the stage-name labels on the y-axis.
+ * @param showStartEndLabels Unused reserved parameter for start/end time label control.
+ * @param xLabelAutoSkip Unused reserved parameter for x-axis label skip logic.
+ * @param yAxisFixedWidth Width reserved for the y-axis label column.
  */
 @Composable
 fun SleepStageChart(
