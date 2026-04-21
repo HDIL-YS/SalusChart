@@ -14,6 +14,7 @@ material = "1.12.0"
 kotlinxSerializationJson = "1.6.0"
 kotlinxDatetime = "0.4.0"
 graphicsShapes = "1.0.1"
+wearComposeMaterial3 = "1.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,6 +41,7 @@ androidx-ui-unit = { group = "androidx.compose.ui", name = "ui-unit" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 androidx-graphics-shapes = { group = "androidx.graphics", name = "graphics-shapes", version.ref = "graphicsShapes" }
+androidx-wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "wearComposeMaterial3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
