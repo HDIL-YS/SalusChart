@@ -80,6 +80,7 @@ import com.hdil.saluschart.ui.compose.charts.MinimalMultiSegmentGauge
 import com.hdil.saluschart.ui.compose.charts.MinimalProgressBar
 import com.hdil.saluschart.ui.compose.charts.MinimalRangeBarChart
 import com.hdil.saluschart.ui.compose.charts.MinimalSleepChart
+import com.hdil.saluschart.ui.compose.charts.MinimalSleepStageChart
 import com.hdil.saluschart.ui.compose.charts.MultiSegmentGaugeChart
 import com.hdil.saluschart.ui.compose.charts.PagedCalendarChart
 import com.hdil.saluschart.ui.compose.charts.PieChart
@@ -1272,6 +1273,7 @@ fun Minimal_Chart() {
     CardioFitnessMinimalCard()
 
     SleepMinimalCard()
+    SleepStageMinimalCard()
 
         MinimalStackedBarCard()
 
@@ -1579,6 +1581,73 @@ fun SleepMinimalCard() {
                     segmentGapRatio = 0.28f,
                     cornerRadiusRatio = 0.95f,
                     trackAlpha = 0f
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SleepStageMinimalCard() {
+    val sleepBlue = Color(0xFF0A84FF)
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 16.dp),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(0.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(horizontal = 20.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp)
+            ) {
+                Text(
+                    text = "수면 단계",
+                    color = Color.Black,
+                    letterSpacing = 0.2.sp
+                )
+
+                Spacer(Modifier.height(10.dp))
+
+                Text(
+                    text = "양호",
+                    color = sleepBlue,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp
+                )
+
+                Spacer(Modifier.height(4.dp))
+
+                Text(
+                    text = "Deep/Core/REM/Awake",
+                    color = Color(0xFF9B9B9B),
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 13.sp
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .width(110.dp)
+                    .height(56.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                MinimalSleepStageChart(
+                    modifier = Modifier.fillMaxSize(),
+                    sleepSession = singleSleepSessionData,
+                    barHeightRatio = 0.56f,
+                    minBarWidthRatio = 0.30f,
+                    cornerRadiusRatio = 0.24f,
+                    connectorWidthRatio = 0.12f
                 )
             }
         }
