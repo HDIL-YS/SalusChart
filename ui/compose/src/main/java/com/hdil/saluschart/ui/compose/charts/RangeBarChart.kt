@@ -3,7 +3,6 @@ package com.hdil.saluschart.ui.compose.charts
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -61,6 +60,21 @@ import com.hdil.saluschart.ui.theme.LocalSalusChartColors
 import kotlin.math.min
 
 /**
+ * A single entry in a [RangeBarChart] legend.
+ *
+ * @param label Text label for this legend entry.
+ * @param color Color of the legend indicator.
+ * @param shape Shape of the legend indicator; defaults to [LegendShape.Dot].
+ */
+data class LegendItem(
+    val label: String,
+    val color: Color,
+    val shape: LegendShape = LegendShape.Dot
+)
+
+@JvmName("RangeBarChartRangeMarks")
+@Composable
+/**
  * Renders a **range bar chart** where each x-position is drawn as a vertical bar spanning
  * from a minimum value to a maximum value.
  *
@@ -70,7 +84,7 @@ import kotlin.math.min
  *   (see [interactionType]). Tapping the selected bar again clears selection.
  * - Optional **overlay points** can be drawn on top of each bar (see [pointValues]).
  * - Optional **horizontal reference lines** can be drawn (see [referenceLines]).
- * - Optional **legend** can be shown below the x-axis tick labels (see [legendItems], [showLegend]).
+ * - Optional **legend** can be shown below or above the chart (see [legendItems], [showLegend], [legendPosition]).
  *
  * ## Layout modes
  * This chart supports three display modes:
@@ -102,7 +116,7 @@ import kotlin.math.min
  * @param yTickStep Optional fixed tick step for the y-axis grid. If null, ticks are computed automatically.
  * @param unit Unit suffix used for tooltip/value formatting (e.g., `"mg/dL"`, `"bpm"`).
  * @param pointValues Optional overlay points for each x-position (one list per bar index).
- *   `pointValues[index]` corresponds to `data[index]`.
+ *   Each entry corresponds to the item at the same list position in [data].
  * @param pointColor Color used to draw overlay points.
  * @param pointRadius Radius of overlay points.
  * @param barCornerRadiusFraction Uniform corner radius fraction applied to bars (recommended 0.0–0.5).
@@ -116,27 +130,14 @@ import kotlin.math.min
  * @param initialPageIndex Optional initial page index for paging mode. If null, defaults to the last page.
  * @param yAxisFixedWidth Width reserved for an external/fixed Y-axis pane in modes that support it.
  * @param referenceLines Optional horizontal reference lines drawn across the plot area.
- * @param legendItems Legend entries. When non-empty and [showLegend] is true, the legend is shown below the chart.
+ * @param showYAxisHighlight Whether to highlight matching Y-axis values for active reference lines.
+ * @param tooltipColor Color used for the tooltip surface when a bar is selected.
+ * @param legendItems Legend entries. When non-empty and [showLegend] is true, the legend is shown.
  * @param showLegend Whether to display the legend (requires [legendItems] to be non-empty).
+ * @param legendPosition Position of the legend relative to the chart content.
  *
  * @throws IllegalArgumentException if both [windowSize] and [pageSize] are provided.
  */
-
-/**
- * A single entry in a [RangeBarChart] legend.
- *
- * @param label Text label for this legend entry.
- * @param color Color of the legend indicator.
- * @param shape Shape of the legend indicator; defaults to [LegendShape.Dot].
- */
-data class LegendItem(
-    val label: String,
-    val color: Color,
-    val shape: LegendShape = LegendShape.Dot
-)
-
-@JvmName("RangeBarChartRangeMarks")
-@Composable
 fun RangeBarChart(
     modifier: Modifier = Modifier,
     data: List<RangeChartMark>,
@@ -446,12 +447,12 @@ private fun RangeBarChartContent(
             // Calculate canvas width for scrolling mode
             val canvasWidth = if (useScrolling) {
                 val chartWidth = availableWidth - (marginHorizontal * 2)
-                val slotWidth = chartWidth / windowSize!!.toFloat()
+                val slotWidth = chartWidth / windowSize.toFloat()
                 slotWidth * rangeData.size
             } else null
 
             val chartWidth = availableWidth - (marginHorizontal * 2)
-            val slotWidthDp = if (useScrolling) chartWidth / windowSize!!.toFloat() else 0.dp
+            val slotWidthDp = if (useScrolling) chartWidth / windowSize.toFloat() else 0.dp
             val clipRightDp = if (useScrolling) slotWidthDp * 0.55f else 0.dp
 
             val labels = rangeData.map { it.label ?: it.x.toString() }
@@ -1166,7 +1167,26 @@ private fun RangeBarChartPagedInternal(
                 if (rightOffset > 0.dp) Spacer(Modifier.width(rightOffset))
             }
         }
-        if (showLegend && legendItems.isNotEmpty()) {
+        if (showLegend && legendItems.isNotEmpty() && legendPosition == LegendPosition.TOP) {
+            val hasLeftLabel = yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.LEFT
+            val hasRightLabel = yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.RIGHT
+            val leftOffset = (if (hasLeftLabel) 20.dp else 0.dp) + (if (showYAxis && yAxisPosition == YAxisPosition.LEFT) yAxisFixedWidth else 0.dp)
+            val rightOffset = (if (showYAxis && yAxisPosition == YAxisPosition.RIGHT) yAxisFixedWidth else 0.dp) + (if (hasRightLabel) 20.dp else 0.dp)
+            Spacer(Modifier.height(8.dp))
+            Row(Modifier.fillMaxWidth()) {
+                if (leftOffset > 0.dp) Spacer(Modifier.width(leftOffset))
+                Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    ChartLegend(
+                        labels = legendItems.map { it.label },
+                        colors = legendItems.map { it.color },
+                        shapes = legendItems.map { it.shape },
+                        position = LegendPosition.TOP
+                    )
+                }
+                if (rightOffset > 0.dp) Spacer(Modifier.width(rightOffset))
+            }
+        }
+        if (showLegend && legendItems.isNotEmpty() && legendPosition != LegendPosition.TOP) {
             val hasLeftLabel = yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.LEFT
             val hasRightLabel = yLabel.isNotBlank() && showYAxis && yAxisPosition == YAxisPosition.RIGHT
             val leftOffset = (if (hasLeftLabel) 20.dp else 0.dp) + (if (showYAxis && yAxisPosition == YAxisPosition.LEFT) yAxisFixedWidth else 0.dp)
@@ -1187,4 +1207,3 @@ private fun RangeBarChartPagedInternal(
         }
     }
 }
-
