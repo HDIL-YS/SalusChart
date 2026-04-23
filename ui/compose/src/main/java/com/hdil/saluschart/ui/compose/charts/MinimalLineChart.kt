@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import com.hdil.saluschart.core.chart.ChartMark
 import com.hdil.saluschart.core.chart.ChartType
 import com.hdil.saluschart.core.chart.ReferenceLineSpec
@@ -19,6 +20,7 @@ import com.hdil.saluschart.core.chart.chartDraw.YAxisPosition
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.dp
 import com.hdil.saluschart.core.chart.chartMath.ChartMath
+import kotlin.math.max
 
 /**
  * Minimal line (sparkline) chart for small screens such as widgets or smartwatches.
@@ -34,6 +36,7 @@ fun MinimalLineChart(
     strokeWidth: Float = 2f,
     padding: Float = 4f,
     showPoints: Boolean = false,
+    pointRadius: Pair<Dp, Dp> = Pair(4.dp, 2.dp),
     referenceLines: List<ReferenceLineSpec> = emptyList(),
 ) {
     if (data.isEmpty()) return
@@ -59,6 +62,23 @@ fun MinimalLineChart(
             chartMetrics = metrics
 
             LineChartDraw.drawLine(this, points, color, strokeWidth)
+            if (showPoints && points.isNotEmpty()) {
+                val outerRadius = max(0f, pointRadius.first.toPx())
+                val innerRadius = pointRadius.second.toPx().coerceIn(0f, outerRadius)
+
+                points.forEach { point ->
+                    drawCircle(
+                        color = color,
+                        radius = outerRadius,
+                        center = point
+                    )
+                    drawCircle(
+                        color = Color.White,
+                        radius = innerRadius,
+                        center = point
+                    )
+                }
+            }
         }
 
         if (referenceLines.isNotEmpty()) {
