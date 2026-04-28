@@ -1943,7 +1943,7 @@ fun MinimalMultiSegmentGaugeCard() {
             // RIGHT gauge
             Box(
                 modifier = Modifier
-                    .width(120.dp)
+                    .width(140.dp)
                     .height(52.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
