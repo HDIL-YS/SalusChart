@@ -6,7 +6,14 @@ API reference is generated with [Dokka](https://kotlinlang.org/docs/dokka-introd
 
 ## Browse API Reference
 
-[Open generated API reference](../api/index.html)
+The generated API reference is published here:
+
+<p class="api-reference-action">
+  <a class="api-reference-link" href="https://hdil-ys.github.io/SalusChart/api/index.html">
+    Open generated API reference
+    <span aria-hidden="true">→</span>
+  </a>
+</p>
 
 The API reference is served from `docs/public/api` in the VitePress site. Regenerate it after changing public Kotlin APIs.
 
@@ -71,3 +78,28 @@ The chart composable signatures are documented inline with KDoc. To browse them:
 | `AggregationType` | `SUM`, `DAILY_AVERAGE`, `DURATION_SUM`, `MIN_MAX` |
 | `TimeUnitGroup` | `MINUTE`, `HOUR`, `DAY`, `WEEK`, `MONTH`, `YEAR` |
 | `MassUnit` | `KILOGRAM`, `POUND`, `GRAM`, `OUNCE` |
+
+<style>
+.api-reference-action {
+  margin: 16px 0 20px;
+}
+
+.api-reference-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--vp-c-brand-1);
+  border-radius: 6px;
+  color: var(--vp-c-brand-1);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.api-reference-link:hover {
+  border-color: var(--vp-c-brand-2);
+  color: var(--vp-c-brand-2);
+  text-decoration: none;
+}
+</style>
