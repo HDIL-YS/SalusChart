@@ -4,12 +4,12 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.hdilys/saluschart-ui-compose.svg)](https://central.sonatype.com/artifact/io.github.hdilys/saluschart-ui-compose)
 
-`0.1.6`
+`0.1.7`
 
 All SalusChart artifacts use the same version. Use one `salusVersion` value across every module in your app.
 
 ```kotlin
-val salusVersion = "0.1.6"
+val salusVersion = "0.1.7"
 ```
 
 ## Maven Central
