@@ -6,7 +6,7 @@ API reference is generated with [Dokka](https://kotlinlang.org/docs/dokka-introd
 
 ## Browse API Reference
 
-[Open generated API reference](../api/index.html)
+<a class="api-reference-button" href="../api/index.html">Open generated API reference</a>
 
 The API reference is served from `docs/public/api` in the VitePress site. Regenerate it after changing public Kotlin APIs.
 
@@ -71,3 +71,24 @@ The chart composable signatures are documented inline with KDoc. To browse them:
 | `AggregationType` | `SUM`, `DAILY_AVERAGE`, `DURATION_SUM`, `MIN_MAX` |
 | `TimeUnitGroup` | `MINUTE`, `HOUR`, `DAY`, `WEEK`, `MONTH`, `YEAR` |
 | `MassUnit` | `KILOGRAM`, `POUND`, `GRAM`, `OUNCE` |
+
+<style>
+.api-reference-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 18px;
+  border-radius: 20px;
+  background: var(--vp-c-brand-1);
+  color: var(--vp-c-white);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.api-reference-button:hover {
+  background: var(--vp-c-brand-2);
+  color: var(--vp-c-white);
+  text-decoration: none;
+}
+</style>
