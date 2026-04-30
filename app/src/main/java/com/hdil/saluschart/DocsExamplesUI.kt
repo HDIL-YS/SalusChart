@@ -40,7 +40,6 @@ import com.hdil.saluschart.ui.compose.charts.CalendarChart
 import com.hdil.saluschart.ui.compose.charts.CalendarEntry
 import com.hdil.saluschart.ui.compose.charts.CellMarkerType
 import com.hdil.saluschart.ui.compose.charts.GaugeSegment
-import com.hdil.saluschart.ui.compose.charts.HorizontalRangeBarChart
 import com.hdil.saluschart.ui.compose.charts.HorizontalStackedBarChartList
 import com.hdil.saluschart.ui.compose.charts.HorizontalStackedBarRow
 import com.hdil.saluschart.ui.compose.charts.LineChart
@@ -57,7 +56,6 @@ import com.hdil.saluschart.ui.compose.charts.MinimalRangeBarChart
 import com.hdil.saluschart.ui.compose.charts.MinimalSleepChart
 import com.hdil.saluschart.ui.compose.charts.MinimalSleepStageChart
 import com.hdil.saluschart.ui.compose.charts.MultiSegmentGaugeChart
-import com.hdil.saluschart.ui.compose.charts.PagedCalendarChart
 import com.hdil.saluschart.ui.compose.charts.PieChart
 import com.hdil.saluschart.ui.compose.charts.ProgressChart
 import com.hdil.saluschart.ui.compose.charts.RangeBarChart
@@ -195,11 +193,9 @@ private val docScreens = listOf(
     "ProgressChart – Progress Bars",
     "StackedBarChart – Basic",
     "CalendarChart – Bubble",
-    "PagedCalendarChart",
     "SleepStageChart – Basic",
     "MultiSegmentGaugeChart",
     "RangeGaugeChart",
-    "HorizontalRangeBarChart",
     "HorizontalStackedBarChartList",
     "MinimalBarChart",
     "MinimalLineChart",
@@ -377,7 +373,7 @@ private fun DocsExampleContent(name: String) {
             referenceLines = listOf(
                 ReferenceLineSpec(
                     type = ReferenceLineType.THRESHOLD,
-                    y = 70.0,
+                    y = 68.4,
                     label = "Target weight",
                     showLabel = true,
                 ),
@@ -435,18 +431,16 @@ private fun DocsExampleContent(name: String) {
         "PieChart – Donut" -> PieChart(
             modifier = Modifier.fillMaxWidth().height(280.dp),
             data = listOf(
-                ChartMark(x = 0.0, y = 30.0, label = "Mon"),
-                ChartMark(x = 1.0, y = 20.0, label = "Tue"),
-                ChartMark(x = 2.0, y = 25.0, label = "Wed"),
-                ChartMark(x = 3.0, y = 15.0, label = "Thu"),
+                ChartMark(x = 0.0, y = 250.0, label = "Carbs"),
+                ChartMark(x = 1.0, y = 80.0,  label = "Protein"),
+                ChartMark(x = 2.0, y = 60.0,  label = "Fat"),
             ),
-            title = "Weekly activity",
+            title = "Macronutrients",
             isDonut = true,
             colors = listOf(
                 Color(0xFF7C4DFF),
                 Color(0xFF26A69A),
                 Color(0xFFFF9800),
-                Color(0xFFFFEB3B),
             ),
             showLegend = true,
             showLabel = true,
@@ -455,18 +449,16 @@ private fun DocsExampleContent(name: String) {
         "PieChart – Full Pie" -> PieChart(
             modifier = Modifier.fillMaxWidth().height(280.dp),
             data = listOf(
-                ChartMark(x = 0.0, y = 30.0, label = "Mon"),
-                ChartMark(x = 1.0, y = 20.0, label = "Tue"),
-                ChartMark(x = 2.0, y = 25.0, label = "Wed"),
-                ChartMark(x = 3.0, y = 15.0, label = "Thu"),
+                ChartMark(x = 0.0, y = 250.0, label = "Carbs"),
+                ChartMark(x = 1.0, y = 80.0,  label = "Protein"),
+                ChartMark(x = 2.0, y = 60.0,  label = "Fat"),
             ),
-            title = "Weekly activity",
+            title = "Macronutrients",
             isDonut = false,
             colors = listOf(
                 Color(0xFF7C4DFF),
                 Color(0xFF26A69A),
                 Color(0xFFFF9800),
-                Color(0xFFFFEB3B),
             ),
             showLegend = true,
             legendPosition = LegendPosition.RIGHT,
@@ -531,15 +523,6 @@ private fun DocsExampleContent(name: String) {
             bubbleType = BubbleType.CIRCLE,
         )
 
-        "PagedCalendarChart" -> PagedCalendarChart(
-            modifier = Modifier.fillMaxWidth(),
-            initialYearMonth = YearMonth.of(2024, 1),
-            entriesForMonth = { ym ->
-                calendarEntries.filter { it.date.year == ym.year && it.date.month == ym.month }
-            },
-            markerType = CellMarkerType.BUBBLE,
-        )
-
         // ── SleepStageChart ───────────────────────────────────────────────────
 
         "SleepStageChart – Basic" -> SleepStageChart(
@@ -577,16 +560,6 @@ private fun DocsExampleContent(name: String) {
         )
 
         // ── Horizontal Charts ─────────────────────────────────────────────────
-
-        "HorizontalRangeBarChart" -> HorizontalRangeBarChart(
-            modifier = Modifier.fillMaxWidth().height(300.dp),
-            data = horizontalRangeData,
-            title = "Sleep consistency",
-            minX = 20.0,
-            maxX = 33.0,
-            rowLabels = listOf("Mon", "Tue", "Wed"),
-            goodColor = Color(0xFF7C4DFF),
-        )
 
         "HorizontalStackedBarChartList" -> HorizontalStackedBarChartList(
             modifier = Modifier.fillMaxWidth(),
@@ -634,18 +607,24 @@ private fun DocsExampleContent(name: String) {
             color = Color(0xFF26A69A),
         )
 
-        "MinimalRangeBarChart" -> MinimalRangeBarChart(
-            modifier = Modifier.size(120.dp, 80.dp),
-            data = listOf(
-                ChartMark(x = 0.0, y = 55.0),
-                ChartMark(x = 0.0, y = 150.0),
-                ChartMark(x = 1.0, y = 60.0),
-                ChartMark(x = 1.0, y = 140.0),
-                ChartMark(x = 2.0, y = 58.0),
-                ChartMark(x = 2.0, y = 155.0),
-            ),
-            color = Color(0xFFFF9800),
-        )
+        // MinimalRangeBarChart ignores its modifier param (Box(Modifier) bug),
+        // so we size the outer Box instead.
+        "MinimalRangeBarChart" -> androidx.compose.foundation.layout.Box(
+            modifier = Modifier.fillMaxWidth().height(120.dp)
+        ) {
+            MinimalRangeBarChart(
+                modifier = Modifier.fillMaxSize(),
+                data = listOf(
+                    ChartMark(x = 0.0, y = 55.0),
+                    ChartMark(x = 0.0, y = 150.0),
+                    ChartMark(x = 1.0, y = 60.0),
+                    ChartMark(x = 1.0, y = 140.0),
+                    ChartMark(x = 2.0, y = 58.0),
+                    ChartMark(x = 2.0, y = 155.0),
+                ),
+                color = Color(0xFFFF9800),
+            )
+        }
 
         "MinimalProgressBar" -> MinimalProgressBar(
             modifier = Modifier.fillMaxWidth().height(60.dp),
@@ -678,8 +657,10 @@ private fun DocsExampleContent(name: String) {
             label = "Good",
         )
 
+        // segmentGapRatio must be very small or segments get clipped to 0 height.
         "MinimalSleepChart" -> MinimalSleepChart(
-            modifier = Modifier.fillMaxWidth().height(80.dp),
+            modifier = Modifier.fillMaxWidth().height(100.dp),
+            segmentGapRatio = 0.02f,
             columns = listOf(
                 SleepColumn(listOf(
                     SleepSegment(value = 30f,  color = Color(0xFFE53935)),
@@ -692,6 +673,24 @@ private fun DocsExampleContent(name: String) {
                     SleepSegment(value = 100f, color = Color(0xFF42A5F5)),
                     SleepSegment(value = 80f,  color = Color(0xFF1A237E)),
                     SleepSegment(value = 50f,  color = Color(0xFF7E57C2)),
+                )),
+                SleepColumn(listOf(
+                    SleepSegment(value = 25f,  color = Color(0xFFE53935)),
+                    SleepSegment(value = 110f, color = Color(0xFF42A5F5)),
+                    SleepSegment(value = 70f,  color = Color(0xFF1A237E)),
+                    SleepSegment(value = 65f,  color = Color(0xFF7E57C2)),
+                )),
+                SleepColumn(listOf(
+                    SleepSegment(value = 15f,  color = Color(0xFFE53935)),
+                    SleepSegment(value = 95f,  color = Color(0xFF42A5F5)),
+                    SleepSegment(value = 100f, color = Color(0xFF1A237E)),
+                    SleepSegment(value = 60f,  color = Color(0xFF7E57C2)),
+                )),
+                SleepColumn(listOf(
+                    SleepSegment(value = 35f,  color = Color(0xFFE53935)),
+                    SleepSegment(value = 80f,  color = Color(0xFF42A5F5)),
+                    SleepSegment(value = 85f,  color = Color(0xFF1A237E)),
+                    SleepSegment(value = 70f,  color = Color(0xFF7E57C2)),
                 )),
             )
         )
