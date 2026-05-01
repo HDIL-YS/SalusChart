@@ -1,6 +1,6 @@
 # Platform Integrations
 
-SalusChart does not require a specific health data provider. Apps can read from Apple Health, Samsung Health, Health Connect, Wear OS, or their own backend, then map those records into SalusChart models.
+SalusChart does not require a specific health data provider. Apps can read from Apple Health, Samsung Health, Health Connect, Wear OS, or their own backend, then map those records into SalusChart models before using the shared transform and chart layers.
 
 ## Integration flow
 
@@ -8,7 +8,8 @@ SalusChart does not require a specific health data provider. Apps can read from 
 platform SDK records
     -> app mapper
     -> data:model health records
-    -> core:transform aggregation
+    -> core:transform TemporalDataSet
+    -> chart marks
     -> ui:compose or ui:wear-compose chart
 ```
 

@@ -1,6 +1,6 @@
 # SalusChart
 
-A modular Jetpack Compose charting library for Android health apps.
+A modular Jetpack Compose visualization library for mobile and wearable health apps.
 
 **Latest version:** `0.1.8` — [Maven Central](https://central.sonatype.com/search?q=io.github.hdilys)
 
@@ -21,9 +21,9 @@ dependencies {
 }
 ```
 
-## Chart types
+## Health visualization components
 
-20+ chart composables including bar, line, range bar, scatter, pie, progress rings, sleep stage, calendar heatmap, gauge, stacked bar, and compact minimal variants. Wear OS variants available in a separate module.
+20+ reusable chart composables for common mHealth patterns, including bar, line, range bar, scatter, pie, progress rings, sleep stage, calendar heatmap, gauge, stacked bar, and compact minimal variants. Wear OS variants are available in a separate module.
 
 See the [chart reference](https://hdil-ys.github.io/SalusChart/charts/) for the full list.
 
@@ -33,8 +33,8 @@ See the [chart reference](https://hdil-ys.github.io/SalusChart/charts/) for the 
 |---|---|
 | `saluschart-ui-compose` | All chart composables |
 | `saluschart-ui-theme` | `LocalSalusChartColors` theming |
-| `saluschart-core-chart` | Chart math and draw primitives |
-| `saluschart-core-transform` | Data aggregation |
+| `saluschart-core-chart` | Chart marks, math, and draw primitives |
+| `saluschart-core-transform` | Health data normalization and aggregation |
 | `saluschart-core-util` | Aggregation and time-unit enums |
 | `saluschart-data-model` | Health data models |
 | `saluschart-ui-wear-compose` | Wear OS charts |

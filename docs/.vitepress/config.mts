@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'SalusChart',
-  description: 'Modular Jetpack Compose charting library for Android health apps',
+  description: 'Modular Jetpack Compose visualization library for mobile health apps',
   base: '/SalusChart/',
 
   themeConfig: {
@@ -21,6 +21,7 @@ export default defineConfig({
           items: [
             { text: 'Getting Started', link: '/guide/getting-started' },
             { text: 'Installation', link: '/guide/installation' },
+            { text: 'Design Principles', link: '/guide/design-principles' },
             { text: 'Modules', link: '/guide/modules' },
             { text: 'Data Model', link: '/guide/data-model' },
             { text: 'Data Transform', link: '/guide/data-transform' },

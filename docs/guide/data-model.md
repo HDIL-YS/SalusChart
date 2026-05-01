@@ -1,6 +1,80 @@
 # Data Model
 
-SalusChart uses a small set of mark types as its chart input format.
+SalusChart separates health-domain records from the chart marks used by the rendering layer. Platform records are mapped into `data:model`, normalized by `core:transform`, and then rendered as chart marks.
+
+```text
+platform health records
+    -> data:model health records
+    -> TemporalDataSet
+    -> ChartMark / RangeChartMark / ProgressChartMark
+    -> chart composables
+```
+
+## Health data models
+
+These live in `data:model` and are inputs to `core:transform`. They provide a common shape for health data before it becomes chart marks.
+
+| Model | Use |
+|---|---|
+| `StepCount` | interval step totals |
+| `Exercise` | interval calories burned |
+| `HeartRate` | session with timestamped BPM samples |
+| `Weight` | point-in-time body weight with `Mass` |
+| `BloodPressure` | point-in-time systolic and diastolic values |
+| `BloodGlucose` | point-in-time glucose level |
+| `BodyFat` | point-in-time body fat percentage |
+| `SkeletalMuscleMass` | point-in-time skeletal muscle mass |
+| `Diet` | interval meal calories and macro nutrients |
+| `SleepSession` | sleep interval with optional sleep stages |
+
+Platform SDKs can expose different raw record types. Map those records into these models first, then transform them with `core:transform`.
+
+### SleepSession
+
+```kotlin
+import com.hdil.saluschart.data.model.model.SleepSession
+import com.hdil.saluschart.data.model.model.SleepStage
+import com.hdil.saluschart.data.model.model.SleepStageType
+import java.time.Instant
+
+val session = SleepSession(
+    startTime = Instant.parse("2024-01-15T23:00:00Z"),
+    endTime   = Instant.parse("2024-01-16T07:00:00Z"),
+    stages = listOf(
+        SleepStage(
+            startTime = Instant.parse("2024-01-15T23:00:00Z"),
+            endTime   = Instant.parse("2024-01-15T23:30:00Z"),
+            stage = SleepStageType.LIGHT
+        ),
+        SleepStage(
+            startTime = Instant.parse("2024-01-15T23:30:00Z"),
+            endTime   = Instant.parse("2024-01-16T01:00:00Z"),
+            stage = SleepStageType.DEEP
+        ),
+    )
+)
+```
+
+`SleepStageType` values: `AWAKE`, `REM`, `LIGHT`, `DEEP`, `UNKNOWN`.
+
+### Mass
+
+Use `Mass` and `MassUnit` for body measurements that need unit conversion.
+
+```kotlin
+import com.hdil.saluschart.data.model.model.Mass
+import com.hdil.saluschart.data.model.model.MassUnit
+
+val weight = Mass.kilograms(68.4)
+val pounds = weight.toPounds()
+val display = weight.toString(MassUnit.KILOGRAM)
+```
+
+`MassUnit` values: `KILOGRAM`, `POUND`, `GRAM`, `OUNCE`.
+
+## Chart mark types
+
+Chart marks are the rendering-layer input format. Most apps create them through `core:transform`, but they can also be built directly for custom data sources.
 
 ## ChartMark
 
@@ -202,73 +276,6 @@ data class GaugeSegment(
     val color: Color
 )
 ```
-
-## Health data models
-
-These live in `data:model` and are inputs to `core:transform`. They provide a common shape for health data before it becomes chart marks.
-
-| Model | Use |
-|---|---|
-| `StepCount` | interval step totals |
-| `Exercise` | interval calories burned |
-| `HeartRate` | session with timestamped BPM samples |
-| `Weight` | point-in-time body weight with `Mass` |
-| `BloodPressure` | point-in-time systolic and diastolic values |
-| `BloodGlucose` | point-in-time glucose level |
-| `BodyFat` | point-in-time body fat percentage |
-| `SkeletalMuscleMass` | point-in-time skeletal muscle mass |
-| `Diet` | interval meal calories and macro nutrients |
-| `SleepSession` | sleep interval with optional sleep stages |
-
-Platform SDKs can expose different raw record types. Map those records into these models first, then transform them with `core:transform`.
-
-```text
-Apple Health / Samsung Health / Wear OS records
-    -> data:model records
-    -> ChartMark / RangeChartMark
-    -> chart composables
-```
-
-### SleepSession
-
-```kotlin
-import com.hdil.saluschart.data.model.model.SleepSession
-import com.hdil.saluschart.data.model.model.SleepStage
-import com.hdil.saluschart.data.model.model.SleepStageType
-import java.time.Instant
-
-val session = SleepSession(
-    startTime = Instant.parse("2024-01-15T23:00:00Z"),
-    endTime   = Instant.parse("2024-01-16T07:00:00Z"),
-    stages = listOf(
-        SleepStage(
-            startTime = Instant.parse("2024-01-15T23:00:00Z"),
-            endTime   = Instant.parse("2024-01-15T23:30:00Z"),
-            stage = SleepStageType.LIGHT
-        ),
-        SleepStage(
-            startTime = Instant.parse("2024-01-15T23:30:00Z"),
-            endTime   = Instant.parse("2024-01-16T01:00:00Z"),
-            stage = SleepStageType.DEEP
-        ),
-    )
-)
-```
-
-`SleepStageType` values: `AWAKE`, `REM`, `LIGHT`, `DEEP`, `UNKNOWN`.
-
-### Mass
-
-```kotlin
-import com.hdil.saluschart.data.model.model.Mass
-import com.hdil.saluschart.data.model.model.MassUnit
-
-val weight = Mass(inGrams = 70_000.0)
-weight.toKilograms() // 70.0
-weight.toPounds()    // 154.3...
-```
-
-`MassUnit` values: `KILOGRAM`, `POUND`, `GRAM`, `OUNCE`.
 
 ## Transforming health data
 
