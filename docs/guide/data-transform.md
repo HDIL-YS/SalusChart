@@ -1,11 +1,11 @@
 # Data Transform
 
-`core:transform` converts health-domain records into chart-ready marks.
+`core:transform` normalizes health-domain records into time-indexed `TemporalDataSet` values, then converts them into reusable chart marks.
 
 The usual pipeline is:
 
 ```text
-raw platform data -> data:model health records -> TemporalDataSet -> ChartMark / RangeChartMark
+raw platform data -> data:model health records -> TemporalDataSet -> ChartMark / RangeChartMark -> chart composable
 ```
 
 Use this layer when your app receives many raw samples and needs daily, weekly, monthly, or min/max chart data.

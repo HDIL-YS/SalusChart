@@ -58,6 +58,12 @@ SalusChart does not request platform permissions or read health data directly. A
 
 See [Platform Integrations](./platform-integrations).
 
+## Accessibility
+
+Most charts are rendered with Compose Canvas. Visual marks, reference lines, and selected values are not yet fully exposed as semantic nodes for TalkBack or other assistive technologies.
+
+When shipping production health screens, pair charts with accessible summary text, selected-value labels, or surrounding controls that describe the same information. Future API work should expose chart marks and reference lines as semantic interaction targets.
+
 ## Wear OS
 
 Wear OS charts are optimized for small circular screens, but not every phone chart has a one-to-one Wear equivalent. Prefer `Wear*` and `WearMinimal*` components for watch screens, and avoid long axis labels on small displays.

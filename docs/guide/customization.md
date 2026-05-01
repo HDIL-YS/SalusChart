@@ -1,5 +1,7 @@
 # Customization
 
+SalusChart charts work with concise inputs and sensible defaults first. Advanced styling, layout, interaction, and annotation controls are exposed as opt-in parameters so simple health dashboards stay small while detail views can still be tuned.
+
 ## Size and layout
 
 All charts accept a `modifier` parameter. Use it to control size:

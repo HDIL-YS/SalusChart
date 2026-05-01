@@ -1,6 +1,6 @@
 # Interactions
 
-SalusChart includes common health-app interactions for inspecting values, browsing long time ranges, and reacting to chart selections.
+SalusChart includes common health-app interactions for inspecting values, browsing long time ranges, and reacting to chart selections. These controls are designed for mobile health contexts where screens are small, data is dense, and users often need larger touch targets than the visible mark itself.
 
 ## Interaction types
 

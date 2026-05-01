@@ -1,6 +1,6 @@
 # Getting Started
 
-SalusChart is a modular Jetpack Compose charting library for Android, focused on health data visualization.
+SalusChart is a modular Jetpack Compose visualization library for mobile health apps. It separates health-domain records from visual rendering so the same data pipeline can feed phone dashboards, detail charts, and Wear OS glance views.
 
 ## Requirements
 
@@ -21,7 +21,7 @@ dependencyResolutionManagement {
 }
 ```
 
-Add the core dependency:
+Add the modules your app needs:
 
 ```kotlin
 // build.gradle.kts (app or module)
@@ -72,7 +72,7 @@ fun StepCountChart() {
 
 ## From health records
 
-Most health apps start from platform records, map them into SalusChart's health models, then aggregate them into chart marks.
+Most health apps start from platform records, map them into SalusChart's health models, normalize them by time, then render chart marks.
 
 ```kotlin
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -122,7 +122,7 @@ fun DailyStepsFromHealthRecords() {
 The same flow works for platform integrations:
 
 ```text
-platform records -> data:model -> core:transform -> chart composable
+platform records -> data:model -> TemporalDataSet -> chart marks -> chart composable
 ```
 
 ## Next steps

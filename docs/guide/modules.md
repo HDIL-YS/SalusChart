@@ -1,6 +1,6 @@
 # Modules
 
-SalusChart is split into focused modules so you only pull in what you need.
+SalusChart is split into focused modules so you only pull in what you need. Shared data and transform modules keep health-domain semantics separate from the phone and wearable presentation layers.
 
 ## Module map
 
@@ -8,7 +8,7 @@ SalusChart is split into focused modules so you only pull in what you need.
 io.github.hdilys:saluschart-ui-compose        ← chart composables
 io.github.hdilys:saluschart-ui-theme          ← color theming
 io.github.hdilys:saluschart-core-chart        ← math, draw, data marks
-io.github.hdilys:saluschart-core-transform    ← aggregation
+io.github.hdilys:saluschart-core-transform    ← normalization and aggregation
 io.github.hdilys:saluschart-core-util         ← enums
 io.github.hdilys:saluschart-data-model        ← health models
 io.github.hdilys:saluschart-ui-wear-compose   ← Wear OS charts
