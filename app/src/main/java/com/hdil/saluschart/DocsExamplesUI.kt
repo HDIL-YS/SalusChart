@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.Composable
 import com.hdil.saluschart.core.chart.ChartMark
+import com.hdil.saluschart.core.chart.ComboAxis
+import com.hdil.saluschart.core.chart.ComboSeries
+import com.hdil.saluschart.core.chart.ComboSeriesType
 import com.hdil.saluschart.core.chart.PointType
 import com.hdil.saluschart.core.chart.ProgressChartMark
 import com.hdil.saluschart.core.chart.RangeChartMark
@@ -38,6 +41,7 @@ import com.hdil.saluschart.ui.compose.charts.BarChart
 import com.hdil.saluschart.ui.compose.charts.BubbleType
 import com.hdil.saluschart.ui.compose.charts.CalendarChart
 import com.hdil.saluschart.ui.compose.charts.CalendarEntry
+import com.hdil.saluschart.ui.compose.charts.ComboChart
 import com.hdil.saluschart.ui.compose.charts.CellMarkerType
 import com.hdil.saluschart.ui.compose.charts.GaugeSegment
 import com.hdil.saluschart.ui.compose.charts.HorizontalStackedBarChartList
@@ -192,6 +196,7 @@ private val docScreens = listOf(
     "ProgressChart – Activity Rings",
     "ProgressChart – Progress Bars",
     "StackedBarChart – Basic",
+    "ComboChart – Steps & Heart Rate",
     "CalendarChart – Bubble",
     "SleepStageChart – Basic",
     "MultiSegmentGaugeChart",
@@ -732,6 +737,51 @@ private fun DocsExampleContent(name: String) {
                 Color(0xFF9C27B0),
             ),
             strokeWidth = 12f,
+        )
+
+        // ── ComboChart ────────────────────────────────────────────────────────
+
+        "ComboChart – Steps & Heart Rate" -> ComboChart(
+            modifier = Modifier.fillMaxWidth().height(320.dp),
+            series = listOf(
+                ComboSeries(
+                    type = ComboSeriesType.BAR,
+                    data = listOf(
+                        ChartMark(x = 0.0, y = 4200.0, label = "Mon"),
+                        ChartMark(x = 1.0, y = 7800.0, label = "Tue"),
+                        ChartMark(x = 2.0, y = 6100.0, label = "Wed"),
+                        ChartMark(x = 3.0, y = 9500.0, label = "Thu"),
+                        ChartMark(x = 4.0, y = 3200.0, label = "Fri"),
+                        ChartMark(x = 5.0, y = 8800.0, label = "Sat"),
+                        ChartMark(x = 6.0, y = 5400.0, label = "Sun"),
+                    ),
+                    color = Color(0xFF7C4DFF),
+                    axis = ComboAxis.LEFT,
+                    label = "Steps",
+                    barCornerRadiusFraction = 0.3f,
+                ),
+                ComboSeries(
+                    type = ComboSeriesType.LINE,
+                    data = listOf(
+                        ChartMark(x = 0.0, y = 72.0, label = "Mon"),
+                        ChartMark(x = 1.0, y = 78.0, label = "Tue"),
+                        ChartMark(x = 2.0, y = 75.0, label = "Wed"),
+                        ChartMark(x = 3.0, y = 81.0, label = "Thu"),
+                        ChartMark(x = 4.0, y = 70.0, label = "Fri"),
+                        ChartMark(x = 5.0, y = 77.0, label = "Sat"),
+                        ChartMark(x = 6.0, y = 74.0, label = "Sun"),
+                    ),
+                    color = Color(0xFFE91E63),
+                    axis = ComboAxis.RIGHT,
+                    label = "Heart rate",
+                    showPoints = true,
+                ),
+            ),
+            title = "Steps + Heart Rate",
+            leftAxisLabel = "Steps",
+            rightAxisLabel = "bpm",
+            rightMinY = 60.0,
+            rightMaxY = 90.0,
         )
     }
 }

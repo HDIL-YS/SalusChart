@@ -1,6 +1,5 @@
 package com.hdil.saluschart.core.chart.chartMath
 
-import android.util.Log
 import androidx.compose.ui.geometry.Size
 import com.hdil.saluschart.core.chart.ChartType
 import kotlin.math.abs
@@ -352,16 +351,8 @@ object ChartMath {
         // This prevents a visible gap appearing on the opposite side when labels are long.
         val rightPaddingX = if (includeYAxisPadding) yAxisPaddingPx else 0f
 
-        Log.e("ChartMath", "includeYAxisPadding: $includeYAxisPadding, effectivePaddingX: $effectivePaddingX, rightPaddingX: $rightPaddingX")
-
         val chartWidth = size.width - effectivePaddingX - rightPaddingX
         val chartHeight = size.height - paddingY - paddingBottom
-
-        Log.e(
-            "ChartMath",
-            "Computed Metrics - chartWidth: $chartWidth, chartHeight: $chartHeight, " +
-                    "paddingX: $effectivePaddingX, paddingY: $paddingY, yAxisRange: $yAxisRange"
-        )
 
         return ChartMetrics(
             paddingX = effectivePaddingX,

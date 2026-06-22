@@ -51,11 +51,15 @@ import androidx.compose.ui.unit.sp
 import com.hdil.saluschart.core.chart.BaseChartMark
 import com.hdil.saluschart.core.chart.ChartMark
 import com.hdil.saluschart.core.chart.ChartType
+import com.hdil.saluschart.core.chart.ComboAxis
+import com.hdil.saluschart.core.chart.ComboSeries
+import com.hdil.saluschart.core.chart.ComboSeriesType
 import com.hdil.saluschart.core.chart.InteractionType
 import com.hdil.saluschart.core.chart.PointType
 import com.hdil.saluschart.core.chart.ProgressChartMark
 import com.hdil.saluschart.core.chart.RangeChartMark
 import com.hdil.saluschart.core.chart.ReferenceLineSpec
+import com.hdil.saluschart.core.chart.toRangeChartMarksByXGroup
 import com.hdil.saluschart.core.chart.chartMath.ChartMath
 import com.hdil.saluschart.core.chart.chartDraw.LegendPosition
 import com.hdil.saluschart.core.chart.chartDraw.LineStyle
@@ -71,6 +75,7 @@ import com.hdil.saluschart.data.provider.SampleDataProvider
 import com.hdil.saluschart.data.provider.SampleDataProvider.getHeartRateData
 import com.hdil.saluschart.ui.compose.charts.BarChart
 import com.hdil.saluschart.ui.compose.charts.BubbleType
+import com.hdil.saluschart.ui.compose.charts.ComboChart
 import com.hdil.saluschart.ui.compose.charts.CalendarChart
 import com.hdil.saluschart.ui.compose.charts.CellMarkerType
 import com.hdil.saluschart.ui.compose.charts.GaugeSegment
@@ -185,6 +190,11 @@ fun ExampleUI(modifier: Modifier = Modifier) {
         "Y-Axis Highlight - Range Bar Chart",
         "Paper Figure - Marks & Primitives",
         "Color Schemes Demo",
+        "Steps & Heart Rate - Combo Chart",
+        "Steps Area & Heart Rate - Combo Chart",
+        "Steps vs Goal - Combo Chart",
+        "Weight & Heart Rate - Combo Chart",
+        "Heart Rate Range + Average - Combo Chart",
     )
 
     var selectedChartType by remember { mutableStateOf<String?>("Paper Figure - Marks & Primitives") }
@@ -266,10 +276,205 @@ fun ExampleUI(modifier: Modifier = Modifier) {
                 "Y-Axis Highlight - Range Bar Chart" -> YAxisHighlightDemo_RangeBarChart()
                 "Paper Figure - Marks & Primitives" -> PaperFigureMarksAndPrimitives()
                 "Color Schemes Demo" -> ColorSchemesDemo()
+                "Steps & Heart Rate - Combo Chart" -> ComboChart_StepsHeartRate()
+                "Steps Area & Heart Rate - Combo Chart" -> ComboChart_StepsAreaHeartRate()
+                "Steps vs Goal - Combo Chart" -> ComboChart_StepsGoal()
+                "Weight & Heart Rate - Combo Chart" -> ComboChart_WeightHeartRate()
+                "Heart Rate Range + Average - Combo Chart" -> ComboChart_HeartRateRange()
                 else -> Text("Unknown Chart Type")
             }
         }
     }
+}
+
+@Composable
+fun ComboChart_StepsHeartRate() {
+    val steps = stepCountHealthData.transform(
+        timeUnit = TimeUnitGroup.DAY,
+        aggregationType = AggregationType.SUM
+    )
+    val heartRate = heartRateHealthData.transformToChartMark(
+        timeUnit = TimeUnitGroup.DAY,
+        aggregationType = AggregationType.DAILY_AVERAGE
+    )
+    ComboChart(
+        modifier = Modifier.fillMaxWidth().height(340.dp),
+        series = listOf(
+            ComboSeries(
+                type = ComboSeriesType.BAR,
+                data = steps,
+                color = Primary_Purple,
+                axis = ComboAxis.LEFT,
+                label = "Steps",
+                barCornerRadiusFraction = 0.3f
+            ),
+            ComboSeries(
+                type = ComboSeriesType.LINE,
+                data = heartRate,
+                color = Color(0xFFE91E63),
+                axis = ComboAxis.RIGHT,
+                label = "Heart rate",
+                showPoints = true
+            )
+        ),
+        title = "Daily Steps + Average Heart Rate",
+        xLabel = "Date",
+        leftAxisLabel = "Steps",
+        rightAxisLabel = "bpm",
+        rightMinY = 60.0,
+        rightMaxY = 100.0
+    )
+}
+
+@Composable
+fun ComboChart_StepsAreaHeartRate() {
+    // AREA + LINE on a dual axis.
+    val steps = stepCountHealthData.transform(
+        timeUnit = TimeUnitGroup.DAY,
+        aggregationType = AggregationType.SUM
+    )
+    val heartRate = heartRateHealthData.transformToChartMark(
+        timeUnit = TimeUnitGroup.DAY,
+        aggregationType = AggregationType.DAILY_AVERAGE
+    )
+    ComboChart(
+        modifier = Modifier.fillMaxWidth().height(340.dp),
+        series = listOf(
+            ComboSeries(
+                type = ComboSeriesType.AREA,
+                data = steps,
+                color = Primary_Purple,
+                axis = ComboAxis.LEFT,
+                label = "Steps",
+                areaAlpha = 0.3f
+            ),
+            ComboSeries(
+                type = ComboSeriesType.LINE,
+                data = heartRate,
+                color = Color(0xFFE91E63),
+                axis = ComboAxis.RIGHT,
+                label = "Heart rate",
+                showPoints = true
+            )
+        ),
+        title = "Steps (area) + Heart Rate",
+        xLabel = "Date",
+        leftAxisLabel = "Steps",
+        rightAxisLabel = "bpm",
+        rightMinY = 60.0,
+        rightMaxY = 100.0
+    )
+}
+
+@Composable
+fun ComboChart_StepsGoal() {
+    // Single-axis combo: bars with a constant goal line on the same axis.
+    val steps = stepCountHealthData.transform(
+        timeUnit = TimeUnitGroup.DAY,
+        aggregationType = AggregationType.SUM
+    )
+    val goal = steps.map { ChartMark(x = it.x, y = 8000.0, label = it.label) }
+    ComboChart(
+        modifier = Modifier.fillMaxWidth().height(340.dp),
+        series = listOf(
+            ComboSeries(
+                type = ComboSeriesType.BAR,
+                data = steps,
+                color = Primary_Purple,
+                axis = ComboAxis.LEFT,
+                label = "Steps",
+                barCornerRadiusFraction = 0.3f
+            ),
+            ComboSeries(
+                type = ComboSeriesType.LINE,
+                data = goal,
+                color = Color(0xFFFF6D00),
+                axis = ComboAxis.LEFT,
+                label = "Goal (8k)",
+                strokeWidth = 5f
+            )
+        ),
+        title = "Steps vs Daily Goal",
+        xLabel = "Date",
+        leftAxisLabel = "Steps",
+        showRightAxis = false
+    )
+}
+
+@Composable
+fun ComboChart_WeightHeartRate() {
+    // Two LINE series on a dual axis (different units).
+    val weight = weightHealthData.transform(
+        massUnit = MassUnit.KILOGRAM,
+        timeUnit = TimeUnitGroup.DAY,
+        aggregationType = AggregationType.DAILY_AVERAGE
+    )
+    val heartRate = heartRateHealthData.transformToChartMark(
+        timeUnit = TimeUnitGroup.DAY,
+        aggregationType = AggregationType.DAILY_AVERAGE
+    )
+    ComboChart(
+        modifier = Modifier.fillMaxWidth().height(340.dp),
+        series = listOf(
+            ComboSeries(
+                type = ComboSeriesType.LINE,
+                data = weight,
+                color = Color(0xFF009688),
+                axis = ComboAxis.LEFT,
+                label = "Weight",
+                showPoints = true
+            ),
+            ComboSeries(
+                type = ComboSeriesType.LINE,
+                data = heartRate,
+                color = Color(0xFFE91E63),
+                axis = ComboAxis.RIGHT,
+                label = "Heart rate",
+                showPoints = true
+            )
+        ),
+        title = "Weight & Heart Rate",
+        xLabel = "Date",
+        leftAxisLabel = "kg",
+        rightAxisLabel = "bpm",
+        rightMinY = 60.0,
+        rightMaxY = 100.0
+    )
+}
+
+@Composable
+fun ComboChart_HeartRateRange() {
+    // RANGE_BAR + LINE sharing a single axis (daily HR min–max with the midpoint).
+    val hrRange = rangeData.toRangeChartMarksByXGroup()
+    val hrMid = hrRange.map {
+        ChartMark(x = it.x, y = (it.minPoint.y + it.maxPoint.y) / 2.0, label = it.label)
+    }
+    ComboChart(
+        modifier = Modifier.fillMaxWidth().height(340.dp),
+        series = listOf(
+            ComboSeries(
+                type = ComboSeriesType.RANGE_BAR,
+                data = hrRange,
+                color = Color(0xFF90CAF9),
+                axis = ComboAxis.LEFT,
+                label = "HR range",
+                barWidthRatio = 0.5f,
+                barCornerRadiusFraction = 0.5f
+            ),
+            ComboSeries(
+                type = ComboSeriesType.LINE,
+                data = hrMid,
+                color = Color(0xFFE91E63),
+                axis = ComboAxis.LEFT,
+                label = "Average",
+                showPoints = true
+            )
+        ),
+        title = "Heart Rate Range + Average",
+        xLabel = "Date",
+        leftAxisLabel = "bpm",
+        showRightAxis = false
+    )
 }
 
 @Composable

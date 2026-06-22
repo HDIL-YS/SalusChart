@@ -27,7 +27,8 @@ enum class ChartType {
     CALENDAR,
     SLEEP_STAGE,
     GAUGE,        // SINGLE/MULTI_SEGMENT/RANGE via [GaugeVariant]
-    LADDER;
+    LADDER,
+    COMBO;        // multiple overlaid series of different types (see [ComboSeries])
 
     companion object {
         fun fromString(type: String?): ChartType? {
