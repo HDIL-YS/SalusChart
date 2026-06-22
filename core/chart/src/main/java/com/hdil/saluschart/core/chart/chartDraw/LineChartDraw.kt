@@ -51,6 +51,38 @@ object LineChartDraw {
     }
 
     /**
+     * Fills the area between a polyline and a horizontal baseline.
+     *
+     * Builds a closed path from [baselineY] up through [points] (in canvas coordinates) and back
+     * down to [baselineY], then fills it with [color]. Typically drawn underneath the line stroke
+     * (use a translucent [color]) to render an area chart.
+     *
+     * No drawing occurs if fewer than 2 points are provided.
+     *
+     * @param drawScope Compose draw scope.
+     * @param points Points in canvas coordinates, in draw order.
+     * @param baselineY Y coordinate (canvas px) of the fill baseline, usually the chart bottom.
+     * @param color Fill color (apply alpha for translucency).
+     */
+    fun drawArea(
+        drawScope: DrawScope,
+        points: List<Offset>,
+        baselineY: Float,
+        color: Color
+    ) {
+        if (points.size < 2) return
+
+        val path = androidx.compose.ui.graphics.Path().apply {
+            moveTo(points.first().x, baselineY)
+            points.forEach { lineTo(it.x, it.y) }
+            lineTo(points.last().x, baselineY)
+            close()
+        }
+
+        drawScope.drawPath(path = path, color = color)
+    }
+
+    /**
      * Draws X-axis labels for a line chart.
      *
      * Positioning rule:

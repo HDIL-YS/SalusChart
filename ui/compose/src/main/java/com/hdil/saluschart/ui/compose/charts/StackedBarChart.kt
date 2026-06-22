@@ -1,6 +1,5 @@
 package com.hdil.saluschart.ui.compose.charts
 
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.horizontalScroll
