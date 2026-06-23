@@ -1,18 +1,18 @@
-# ComboChart
+# CombinedChart
 
 Overlay multiple series of different types — line, bar, scatter, area, range bar — on a single shared X axis, with an optional second (right) Y-axis so metrics with different units can share one chart (e.g. steps as bars and heart rate as a line).
 
-**Import:** `com.hdil.saluschart.ui.compose.charts.ComboChart`
+**Import:** `com.hdil.saluschart.ui.compose.charts.CombinedChart`
 
 ## Signature
 
 ```kotlin
 @Composable
-fun ComboChart(
+fun CombinedChart(
     modifier: Modifier = Modifier,
-    series: List<ComboSeries>,
+    series: List<CombinedSeries>,
     xLabels: List<String> = emptyList(),
-    title: String = "Combo Chart",
+    title: String = "Combined Chart",
     showTitle: Boolean = true,
     xLabel: String = "",
     leftAxisLabel: String = "",
@@ -37,14 +37,14 @@ fun ComboChart(
 )
 ```
 
-Each entry in `series` is a `ComboSeries` describing one overlaid layer:
+Each entry in `series` is a `CombinedSeries` describing one overlaid layer:
 
 ```kotlin
-data class ComboSeries(
-    val type: ComboSeriesType,          // LINE | BAR | SCATTER | AREA | RANGE_BAR
+data class CombinedSeries(
+    val type: CombinedSeriesType,          // LINE | BAR | SCATTER | AREA | RANGE_BAR
     val data: List<BaseChartMark>,      // ChartMark, or RangeChartMark for RANGE_BAR
     val color: Color = Color.Unspecified,
-    val axis: ComboAxis = ComboAxis.LEFT,   // LEFT or RIGHT Y-axis
+    val axis: CombinedAxis = CombinedAxis.LEFT,   // LEFT or RIGHT Y-axis
     val label: String = "",
     val strokeWidth: Float = 4f,        // line / area
     val showPoints: Boolean = false,    // line / area: draw a marker at each point
@@ -62,31 +62,31 @@ Series are **index-aligned**: `data[i]` in every series occupies slot `i`, so su
 
 Steps as bars on the left axis, heart rate as a line on the right axis.
 
-![ComboChart dual-axis example](/charts/combo-chart-basic.png)
+![CombinedChart dual-axis example](/charts/combined-chart-basic.png)
 
 ```kotlin
 import com.hdil.saluschart.core.chart.ChartMark
-import com.hdil.saluschart.core.chart.ComboAxis
-import com.hdil.saluschart.core.chart.ComboSeries
-import com.hdil.saluschart.core.chart.ComboSeriesType
-import com.hdil.saluschart.ui.compose.charts.ComboChart
+import com.hdil.saluschart.core.chart.CombinedAxis
+import com.hdil.saluschart.core.chart.CombinedSeries
+import com.hdil.saluschart.core.chart.CombinedSeriesType
+import com.hdil.saluschart.ui.compose.charts.CombinedChart
 
-ComboChart(
+CombinedChart(
     modifier = Modifier.fillMaxWidth().height(320.dp),
     series = listOf(
-        ComboSeries(
-            type = ComboSeriesType.BAR,
+        CombinedSeries(
+            type = CombinedSeriesType.BAR,
             data = steps,                 // List<ChartMark>
             color = Color(0xFF7C4DFF),
-            axis = ComboAxis.LEFT,
+            axis = CombinedAxis.LEFT,
             label = "Steps",
             barCornerRadiusFraction = 0.3f,
         ),
-        ComboSeries(
-            type = ComboSeriesType.LINE,
+        CombinedSeries(
+            type = CombinedSeriesType.LINE,
             data = heartRate,             // List<ChartMark>
             color = Color(0xFFE91E63),
-            axis = ComboAxis.RIGHT,
+            axis = CombinedAxis.RIGHT,
             label = "Heart rate",
             showPoints = true,
         ),
@@ -99,20 +99,20 @@ ComboChart(
 )
 ```
 
-> Every example below is runnable in the sample app — **Examples** tab, entries ending in "Combo Chart". Series of different lengths stay aligned: each series fills the leading slots, so a shorter line lines up with its matching bars instead of stretching across the whole width.
+> Every example below is runnable in the sample app — **Examples** tab, entries ending in "Combined Chart". Series of different lengths stay aligned: each series fills the leading slots, so a shorter line lines up with its matching bars instead of stretching across the whole width.
 
 ## Area + line (dual axis)
 
-Use `ComboSeriesType.AREA` for a filled line (`areaAlpha` controls fill opacity). Here steps are a filled area on the left axis and heart rate is a line on the right.
+Use `CombinedSeriesType.AREA` for a filled line (`areaAlpha` controls fill opacity). Here steps are a filled area on the left axis and heart rate is a line on the right.
 
-![ComboChart area + line](/charts/combo-chart-area.png)
+![CombinedChart area + line](/charts/combined-chart-area.png)
 
 ```kotlin
-ComboChart(
+CombinedChart(
     modifier = Modifier.fillMaxWidth().height(340.dp),
     series = listOf(
-        ComboSeries(ComboSeriesType.AREA, steps, color = Color(0xFF7C4DFF), axis = ComboAxis.LEFT, label = "Steps", areaAlpha = 0.3f),
-        ComboSeries(ComboSeriesType.LINE, heartRate, color = Color(0xFFE91E63), axis = ComboAxis.RIGHT, label = "Heart rate", showPoints = true),
+        CombinedSeries(CombinedSeriesType.AREA, steps, color = Color(0xFF7C4DFF), axis = CombinedAxis.LEFT, label = "Steps", areaAlpha = 0.3f),
+        CombinedSeries(CombinedSeriesType.LINE, heartRate, color = Color(0xFFE91E63), axis = CombinedAxis.RIGHT, label = "Heart rate", showPoints = true),
     ),
     leftAxisLabel = "Steps",
     rightAxisLabel = "bpm",
@@ -124,7 +124,7 @@ ComboChart(
 
 A `RANGE_BAR` series takes `RangeChartMark`s and draws a min–max bar per slot — combine it with a line for a daily heart-rate range plus its average. With no `RIGHT` series the right axis pane is hidden automatically.
 
-![ComboChart range bar + average](/charts/combo-chart-range.png)
+![CombinedChart range bar + average](/charts/combined-chart-range.png)
 
 ```kotlin
 import com.hdil.saluschart.core.chart.RangeChartMark
@@ -134,10 +134,10 @@ import com.hdil.saluschart.core.chart.toRangeChartMarksByXGroup
 val hrRange = rawHrSamples.toRangeChartMarksByXGroup()    // List<RangeChartMark>
 val hrAvg = hrRange.map { ChartMark(it.x, (it.minPoint.y + it.maxPoint.y) / 2.0, it.label) }
 
-ComboChart(
+CombinedChart(
     series = listOf(
-        ComboSeries(ComboSeriesType.RANGE_BAR, hrRange, color = Color(0xFF90CAF9), label = "HR range", barWidthRatio = 0.5f, barCornerRadiusFraction = 0.5f),
-        ComboSeries(ComboSeriesType.LINE, hrAvg, color = Color(0xFFE91E63), label = "Average", showPoints = true),
+        CombinedSeries(CombinedSeriesType.RANGE_BAR, hrRange, color = Color(0xFF90CAF9), label = "HR range", barWidthRatio = 0.5f, barCornerRadiusFraction = 0.5f),
+        CombinedSeries(CombinedSeriesType.LINE, hrAvg, color = Color(0xFFE91E63), label = "Average", showPoints = true),
     ),
     leftAxisLabel = "bpm",
     showRightAxis = false,
@@ -146,15 +146,15 @@ ComboChart(
 
 ## Single axis — bars with a goal line
 
-Bind every series to `ComboAxis.LEFT` and set `showRightAxis = false` for a single-axis combo — e.g. step bars with a constant daily-goal line.
+Bind every series to `CombinedAxis.LEFT` and set `showRightAxis = false` for a single-axis `CombinedChart` — e.g. step bars with a constant daily-goal line.
 
 ```kotlin
 val goal = steps.map { ChartMark(it.x, 8000.0, it.label) }
 
-ComboChart(
+CombinedChart(
     series = listOf(
-        ComboSeries(ComboSeriesType.BAR, steps, color = Color(0xFF7C4DFF), axis = ComboAxis.LEFT, label = "Steps", barCornerRadiusFraction = 0.3f),
-        ComboSeries(ComboSeriesType.LINE, goal, color = Color(0xFFFF6D00), axis = ComboAxis.LEFT, label = "Goal (8k)", strokeWidth = 5f),
+        CombinedSeries(CombinedSeriesType.BAR, steps, color = Color(0xFF7C4DFF), axis = CombinedAxis.LEFT, label = "Steps", barCornerRadiusFraction = 0.3f),
+        CombinedSeries(CombinedSeriesType.LINE, goal, color = Color(0xFFFF6D00), axis = CombinedAxis.LEFT, label = "Goal (8k)", strokeWidth = 5f),
     ),
     leftAxisLabel = "Steps",
     showRightAxis = false,
@@ -166,10 +166,10 @@ ComboChart(
 Series may be the same type. Weight (kg) and heart rate (bpm) as two lines on independent axes.
 
 ```kotlin
-ComboChart(
+CombinedChart(
     series = listOf(
-        ComboSeries(ComboSeriesType.LINE, weight, color = Color(0xFF009688), axis = ComboAxis.LEFT, label = "Weight", showPoints = true),
-        ComboSeries(ComboSeriesType.LINE, heartRate, color = Color(0xFFE91E63), axis = ComboAxis.RIGHT, label = "Heart rate", showPoints = true),
+        CombinedSeries(CombinedSeriesType.LINE, weight, color = Color(0xFF009688), axis = CombinedAxis.LEFT, label = "Weight", showPoints = true),
+        CombinedSeries(CombinedSeriesType.LINE, heartRate, color = Color(0xFFE91E63), axis = CombinedAxis.RIGHT, label = "Heart rate", showPoints = true),
     ),
     leftAxisLabel = "kg",
     rightAxisLabel = "bpm",
@@ -182,12 +182,12 @@ ComboChart(
 Overlay individual readings with a `SCATTER` series — e.g. weight readings on a steps chart. Tapping a slot shows a tooltip listing every series' value at that point.
 
 ```kotlin
-ComboChart(
+CombinedChart(
     series = listOf(
-        ComboSeries(ComboSeriesType.BAR, steps, color = Color(0xFF7C4DFF), axis = ComboAxis.LEFT, label = "Steps"),
-        ComboSeries(
-            ComboSeriesType.SCATTER, weight,
-            color = Color(0xFF009688), axis = ComboAxis.RIGHT, label = "Weight",
+        CombinedSeries(CombinedSeriesType.BAR, steps, color = Color(0xFF7C4DFF), axis = CombinedAxis.LEFT, label = "Steps"),
+        CombinedSeries(
+            CombinedSeriesType.SCATTER, weight,
+            color = Color(0xFF009688), axis = CombinedAxis.RIGHT, label = "Weight",
             pointType = PointType.Triangle, pointRadius = 5.dp,
         ),
     ),
@@ -202,9 +202,9 @@ ComboChart(
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `series` | `List<ComboSeries>` | — | Series to overlay (required) |
+| `series` | `List<CombinedSeries>` | — | Series to overlay (required) |
 | `xLabels` | `List<String>` | `emptyList()` | Per-slot X labels; falls back to the longest series' labels |
-| `title` | `String` | `"Combo Chart"` | Chart title |
+| `title` | `String` | `"Combined Chart"` | Chart title |
 | `showTitle` | `Boolean` | `true` | Whether to render `title` |
 | `xLabel` | `String` | `""` | X-axis caption shown centered below the plot |
 
@@ -242,14 +242,14 @@ ComboChart(
 | `yAxisPaneWidth` | `Dp` | `40.dp` | Width reserved for each Y-axis pane |
 | `contentPadding` | `PaddingValues` | `PaddingValues(16.dp)` | Padding around the chart |
 
-#### ComboSeries fields
+#### CombinedSeries fields
 
 | Field | Type | Default | Description |
 |---|---|---|---|
-| `type` | `ComboSeriesType` | — | `LINE`, `BAR`, `SCATTER`, `AREA`, or `RANGE_BAR` |
+| `type` | `CombinedSeriesType` | — | `LINE`, `BAR`, `SCATTER`, `AREA`, or `RANGE_BAR` |
 | `data` | `List<BaseChartMark>` | — | `ChartMark` per slot; `RangeChartMark` for `RANGE_BAR` |
 | `color` | `Color` | theme palette | Series color |
-| `axis` | `ComboAxis` | `LEFT` | Which Y-axis the series is measured against |
+| `axis` | `CombinedAxis` | `LEFT` | Which Y-axis the series is measured against |
 | `label` | `String` | `""` | Legend / tooltip label |
 | `strokeWidth` | `Float` | `4f` | Line/area thickness (px) |
 | `showPoints` | `Boolean` | `false` | Line/area: draw a marker at each point |
@@ -263,4 +263,4 @@ ComboChart(
 
 - **At most one bar-family series** (`BAR` or `RANGE_BAR`) per chart in this version; grouped/side-by-side bars are planned.
 - A bar-family axis is forced to start at zero so bars don't float. Bind bars to their own axis (or keep that axis zero-based) when mixing with a line.
-- Paging, scrolling, and reference lines are not yet supported on ComboChart — use the dedicated single-type charts for those.
+- Paging, scrolling, and reference lines are not yet supported on CombinedChart — use the dedicated single-type charts for those.

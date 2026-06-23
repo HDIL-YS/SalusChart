@@ -46,7 +46,7 @@ export default defineConfig({
             { text: 'LineChart', link: '/charts/line-chart' },
             { text: 'RangeBarChart', link: '/charts/range-bar-chart' },
             { text: 'ScatterPlot', link: '/charts/scatter-plot' },
-            { text: 'ComboChart', link: '/charts/combo-chart' },
+            { text: 'CombinedChart', link: '/charts/combined-chart' },
             { text: 'PieChart', link: '/charts/pie-chart' },
             { text: 'ProgressChart', link: '/charts/progress-chart' },
             { text: 'StackedBarChart', link: '/charts/stacked-bar-chart' },

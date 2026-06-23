@@ -1,0 +1,19 @@
+.vp-doc mark.salus-highlight {
+  background: linear-gradient(180deg, rgba(255, 232, 128, 0) 28%, rgba(255, 214, 77, 0.64) 28%);
+  border-radius: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  color: var(--vp-c-text-1);
+  font-weight: 650;
+  padding: 0.02em 0.24em;
+}
+
+.dark .vp-doc mark.salus-highlight {
+  background: linear-gradient(180deg, rgba(255, 232, 128, 0) 26%, rgba(255, 202, 40, 0.38) 26%);
+}
+
+.vp-doc mark.salus-highlight code {
+  background-color: rgba(255, 214, 77, 0.24);
+  color: inherit;
+  font-weight: inherit;
+}

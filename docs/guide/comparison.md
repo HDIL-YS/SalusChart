@@ -54,7 +54,7 @@ SalusChart is Compose-only and targets a relatively recent **minSdk 30**, which 
 | Bar / column | Yes | Yes | Yes |
 | Horizontal bar | Yes | Yes | No |
 | Stacked bar | Yes | Yes (grouped/stacked) | Via layered columns |
-| Combined / dual-axis | Yes (`ComboChart`) | Yes (`CombinedChart`) | Yes (layered) |
+| Combined / dual-axis | Yes (`CombinedChart`) | Yes (`CombinedChart`) | Yes (layered) |
 | Scatter | Yes | Yes | No |
 | Bubble | No | Yes | No |
 | Pie / donut | Yes | Yes | Yes (since 3.1.0) |
@@ -248,7 +248,7 @@ These are the full verified facts behind the comparison tables above, kept for r
 | Tech | Kotlin; Jetpack Compose only, Canvas-rendered |
 | SDK | minSdk 30; compileSdk 36 |
 | Modules | `data:model`, `core:transform`, `core:chart`, `core:util`, `ui:compose`, `ui:theme`, `ui:wear-compose` |
-| Chart types | 16 full + 10 minimal health composables (bar, line, scatter, combo, range bar, stacked bar, pie, progress rings, sleep stage, calendar heatmap, gauges, and compact variants) plus Wear OS variants |
+| Chart types | 16 full + 10 minimal health composables (bar, line, scatter, combined, range bar, stacked bar, pie, progress rings, sleep stage, calendar heatmap, gauges, and compact variants) plus Wear OS variants |
 | Health pipeline | Built-in health models + `core:transform` aggregation (minute → year; sum/avg/duration/min-max; gap-fill guidance) |
 | Wear OS | Dedicated `ui:wear-compose` module |
 | Accessibility | Canvas-rendered; marks/selected values not yet fully exposed as semantic nodes — pair with summary text |
