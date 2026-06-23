@@ -42,9 +42,9 @@ import androidx.compose.ui.zIndex
 import com.hdil.saluschart.core.chart.BaseChartMark
 import com.hdil.saluschart.core.chart.ChartMark
 import com.hdil.saluschart.core.chart.ChartType
-import com.hdil.saluschart.core.chart.ComboAxis
-import com.hdil.saluschart.core.chart.ComboSeries
-import com.hdil.saluschart.core.chart.ComboSeriesType
+import com.hdil.saluschart.core.chart.CombinedAxis
+import com.hdil.saluschart.core.chart.CombinedSeries
+import com.hdil.saluschart.core.chart.CombinedSeriesType
 import com.hdil.saluschart.core.chart.RangeChartMark
 import com.hdil.saluschart.core.chart.chartDraw.ChartDraw
 import com.hdil.saluschart.core.chart.chartDraw.ChartLegend
@@ -57,21 +57,21 @@ import com.hdil.saluschart.ui.theme.LocalSalusChartColors
 
 // Vertical room (px) reserved below the plot so x-axis tick labels (drawn at chartBottom + 50f)
 // stay inside the canvas. Shared by the plot and the side axis panes so their plot rects match.
-private const val COMBO_PADDING_BOTTOM = 64f
+private const val COMBINED_PADDING_BOTTOM = 64f
 
 /**
- * A combo / composed chart that overlays multiple series of different types
+ * A combined chart that overlays multiple series of different types
  * (line, bar, scatter, area, range bar) on a single shared X axis, with an optional
  * second (right) Y-axis so series with different units/scales can be compared.
  *
  * Series are index-aligned (`data[i]` occupies slot `i`) and each is measured against the
- * Y-axis it binds to via [ComboSeries.axis]. The left and right axes share one plot rectangle,
+ * Y-axis it binds to via [CombinedSeries.axis]. The left and right axes share one plot rectangle,
  * so bars, lines and points always line up on the same slot centers.
  *
  * v1 limitations: at most one bar-family series (BAR or RANGE_BAR); no paging/scrolling.
  *
  * @param modifier Modifier applied to the outer container.
- * @param series Series to overlay (see [ComboSeries]).
+ * @param series Series to overlay (see [CombinedSeries]).
  * @param xLabels Optional per-slot X labels; falls back to the longest series' labels.
  * @param title Chart title shown above the plot when [showTitle] is true.
  * @param showTitle Whether to render [title].
@@ -97,11 +97,11 @@ private const val COMBO_PADDING_BOTTOM = 64f
  * @param contentPadding Padding around the whole chart.
  */
 @Composable
-fun ComboChart(
+fun CombinedChart(
     modifier: Modifier = Modifier,
-    series: List<ComboSeries>,
+    series: List<CombinedSeries>,
     xLabels: List<String> = emptyList(),
-    title: String = "Combo Chart",
+    title: String = "Combined Chart",
     showTitle: Boolean = true,
     xLabel: String = "",
     leftAxisLabel: String = "",
@@ -125,8 +125,8 @@ fun ComboChart(
     contentPadding: PaddingValues = PaddingValues(16.dp),
 ) {
     if (series.isEmpty()) return
-    require(series.count { it.type == ComboSeriesType.BAR || it.type == ComboSeriesType.RANGE_BAR } <= 1) {
-        "ComboChart v1 supports at most one bar-family series (BAR or RANGE_BAR); grouped bars are not yet supported."
+    require(series.count { it.type == CombinedSeriesType.BAR || it.type == CombinedSeriesType.RANGE_BAR } <= 1) {
+        "CombinedChart v1 supports at most one bar-family series (BAR or RANGE_BAR); grouped bars are not yet supported."
     }
 
     val scheme = LocalSalusChartColors.current
@@ -138,19 +138,19 @@ fun ComboChart(
         }
     }
 
-    val leftSeries = series.filter { it.axis == ComboAxis.LEFT }
-    val rightSeries = series.filter { it.axis == ComboAxis.RIGHT }
+    val leftSeries = series.filter { it.axis == CombinedAxis.LEFT }
+    val rightSeries = series.filter { it.axis == CombinedAxis.RIGHT }
     val hasRight = rightSeries.isNotEmpty() && showRightAxis
     val hasLeft = leftSeries.isNotEmpty() && showLeftAxis
 
-    fun axisValues(list: List<ComboSeries>): List<Double> = list.flatMap { s ->
+    fun axisValues(list: List<CombinedSeries>): List<Double> = list.flatMap { s ->
         s.data.flatMap { m ->
             if (m is RangeChartMark) listOf(m.minPoint.y, m.maxPoint.y) else listOf(m.y)
         }
     }
     // Bar-family axes must be zero-based so bars don't float.
-    fun axisChartType(list: List<ComboSeries>) =
-        if (list.any { it.type == ComboSeriesType.BAR || it.type == ComboSeriesType.RANGE_BAR })
+    fun axisChartType(list: List<CombinedSeries>) =
+        if (list.any { it.type == CombinedSeriesType.BAR || it.type == CombinedSeriesType.RANGE_BAR })
             com.hdil.saluschart.core.chart.ChartType.BAR
         else com.hdil.saluschart.core.chart.ChartType.LINE
 
@@ -216,8 +216,8 @@ fun ComboChart(
                         }
                 ) {
                     // Helper: per-axis metrics sharing the same plot rect.
-                    fun axisMetrics(base: ChartMath.ChartMetrics, s: ComboSeries) =
-                        base.copy(yAxisRange = if (s.axis == ComboAxis.RIGHT) (rightRange ?: leftRange) else leftRange)
+                    fun axisMetrics(base: ChartMath.ChartMetrics, s: CombinedSeries) =
+                        base.copy(yAxisRange = if (s.axis == CombinedAxis.RIGHT) (rightRange ?: leftRange) else leftRange)
 
                     // ---- Layer 1 (bottom): grid + selected guide + AREA fills + X labels ----
                     Canvas(Modifier.fillMaxSize()) {
@@ -227,7 +227,7 @@ fun ComboChart(
                             values = listOf(0.0),
                             chartType = null,
                             includeYAxisPadding = false,
-                            paddingBottom = COMBO_PADDING_BOTTOM
+                            paddingBottom = COMBINED_PADDING_BOTTOM
                         )
                         baseMetrics = base
                         val leftM = base.copy(yAxisRange = leftRange)
@@ -251,7 +251,7 @@ fun ComboChart(
 
                         // AREA fills go under bars/lines
                         series.forEachIndexed { i, s ->
-                            if (s.type == ComboSeriesType.AREA) {
+                            if (s.type == CombinedSeriesType.AREA) {
                                 val pts = mapSlotPoints(s.data, axisMetrics(base, s), slotCount)
                                 ChartDraw.Line.drawArea(this, pts, baselineY, resolvedColors[i].copy(alpha = s.areaAlpha))
                             }
@@ -276,7 +276,7 @@ fun ComboChart(
                             // Pad bar-family series to slotCount so bars share the same x slots
                             // as the other series (BarMarker positions by index/data.size).
                             when (s.type) {
-                                ComboSeriesType.BAR -> ChartDraw.Bar.BarMarker(
+                                CombinedSeriesType.BAR -> ChartDraw.Bar.BarMarker(
                                     data = (0 until slotCount).map { s.data.getOrNull(it) ?: ChartMark(it.toDouble(), m.minY) },
                                     minValues = List(slotCount) { m.minY },
                                     maxValues = (0 until slotCount).map { s.data.getOrNull(it)?.y ?: m.minY },
@@ -288,7 +288,7 @@ fun ComboChart(
                                     chartType = ChartType.BAR,
                                     barCornerRadiusFraction = s.barCornerRadiusFraction,
                                 )
-                                ComboSeriesType.RANGE_BAR -> {
+                                CombinedSeriesType.RANGE_BAR -> {
                                     val ranges = s.data.filterIsInstance<RangeChartMark>()
                                     ChartDraw.Bar.BarMarker(
                                         data = (0 until slotCount).map { ranges.getOrNull(it) ?: ChartMark(it.toDouble(), m.minY) },
@@ -315,10 +315,10 @@ fun ComboChart(
                             values = listOf(0.0),
                             chartType = null,
                             includeYAxisPadding = false,
-                            paddingBottom = COMBO_PADDING_BOTTOM
+                            paddingBottom = COMBINED_PADDING_BOTTOM
                         )
                         series.forEachIndexed { i, s ->
-                            if (s.type == ComboSeriesType.LINE || s.type == ComboSeriesType.AREA) {
+                            if (s.type == CombinedSeriesType.LINE || s.type == CombinedSeriesType.AREA) {
                                 val pts = mapSlotPoints(s.data, axisMetrics(base, s), slotCount)
                                 ChartDraw.Line.drawLine(this, pts, resolvedColors[i], s.strokeWidth)
                             }
@@ -328,8 +328,8 @@ fun ComboChart(
                     // ---- Layer 4: points via the shared PointMarker (scatter + line dots) ----
                     baseMetrics?.let { base ->
                         series.forEachIndexed { i, s ->
-                            val showPts = s.type == ComboSeriesType.SCATTER ||
-                                ((s.type == ComboSeriesType.LINE || s.type == ComboSeriesType.AREA) && s.showPoints)
+                            val showPts = s.type == CombinedSeriesType.SCATTER ||
+                                ((s.type == CombinedSeriesType.LINE || s.type == CombinedSeriesType.AREA) && s.showPoints)
                             if (showPts) {
                                 val cm = s.data.asChartMarks()
                                 val pts = mapSlotPoints(s.data, axisMetrics(base, s), slotCount)
@@ -343,7 +343,7 @@ fun ComboChart(
                                     interactive = false,
                                     showPoint = true,
                                     pointType = s.pointType,
-                                    chartType = if (s.type == ComboSeriesType.SCATTER) ChartType.SCATTERPLOT else ChartType.LINE,
+                                    chartType = if (s.type == CombinedSeriesType.SCATTER) ChartType.SCATTERPLOT else ChartType.LINE,
                                     canvasSize = plotSize,
                                 )
                             }
@@ -362,15 +362,15 @@ fun ComboChart(
                         val yPlaced = with(density) { 8.dp.toPx() }
 
                         Box(Modifier.matchParentSize().zIndex(2f)) {
-                            ComboTooltip(
+                            CombinedTooltip(
                                 slotLabel = effectiveXLabels.getOrNull(idx),
                                 rows = series.mapIndexedNotNull { i, s ->
                                     val mark = s.data.getOrNull(idx) ?: return@mapIndexedNotNull null
                                     val value =
-                                        if (s.type == ComboSeriesType.RANGE_BAR && mark is RangeChartMark)
+                                        if (s.type == CombinedSeriesType.RANGE_BAR && mark is RangeChartMark)
                                             "${fmtValue(mark.minPoint.y)}–${fmtValue(mark.maxPoint.y)}"
                                         else fmtValue(mark.y)
-                                    ComboTooltipRow(
+                                    CombinedTooltipRow(
                                         color = resolvedColors[i],
                                         label = s.label.ifBlank { "Series ${i + 1}" },
                                         value = value
@@ -430,7 +430,7 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.paneMetrics(size: S
         values = listOf(0.0),
         chartType = null,
         includeYAxisPadding = false,
-        paddingBottom = COMBO_PADDING_BOTTOM
+        paddingBottom = COMBINED_PADDING_BOTTOM
     )
 
 /** Adapts any [BaseChartMark] list to [ChartMark]s for the line/scatter mapping + marker reuse. */
@@ -456,12 +456,12 @@ private fun mapSlotPoints(
     }
 }
 
-private data class ComboTooltipRow(val color: Color, val label: String, val value: String)
+private data class CombinedTooltipRow(val color: Color, val label: String, val value: String)
 
 @Composable
-private fun ComboTooltip(
+private fun CombinedTooltip(
     slotLabel: String?,
-    rows: List<ComboTooltipRow>,
+    rows: List<CombinedTooltipRow>,
     modifier: Modifier = Modifier
 ) {
     TooltipContainer(modifier = modifier) {
