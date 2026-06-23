@@ -1,0 +1,50 @@
+.VPHero.has-image .image-src {
+  /* Bound the image by width AND height only; keep width/height auto so the
+     browser preserves the source aspect ratio (no squashing of the ring). */
+  width: auto;
+  height: auto;
+  max-width: min(84vw, 440px);
+  max-height: 220px;
+  object-fit: contain;
+}
+
+.VPHero.has-image .image-container {
+  height: 240px;
+}
+
+@media (min-width: 960px) {
+  .VPHero.has-image .container {
+    gap: 24px;
+    max-width: 1240px;
+  }
+
+  .VPHero.has-image .main {
+    width: 48%;
+    max-width: 560px;
+  }
+
+  .VPHero.has-image .image {
+    flex: 1 1 520px;
+  }
+
+  .VPHero.has-image .image-container {
+    min-height: 340px;
+    transform: none;
+  }
+
+  .VPHero.has-image .image-src {
+    max-width: min(42vw, 560px);
+    max-height: 340px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .VPHero.has-image .container {
+    max-width: 1320px;
+  }
+
+  .VPHero.has-image .image-src {
+    max-width: min(44vw, 620px);
+    max-height: 380px;
+  }
+}

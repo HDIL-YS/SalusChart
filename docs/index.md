@@ -5,6 +5,9 @@ hero:
   name: SalusChart
   text: Mobile health visualization components for Jetpack Compose
   tagline: Normalize health records, aggregate them into time-indexed data, and render consistent charts for mobile and wearable health apps.
+  image:
+    src: /home-hero.png
+    alt: SalusChart Apple Health activity ring and Samsung Health sleep stage charts
   actions:
     - theme: brand
       text: Get Started
