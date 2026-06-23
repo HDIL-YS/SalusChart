@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.Composable
 import com.hdil.saluschart.core.chart.ChartMark
-import com.hdil.saluschart.core.chart.ComboAxis
-import com.hdil.saluschart.core.chart.ComboSeries
-import com.hdil.saluschart.core.chart.ComboSeriesType
+import com.hdil.saluschart.core.chart.CombinedAxis
+import com.hdil.saluschart.core.chart.CombinedSeries
+import com.hdil.saluschart.core.chart.CombinedSeriesType
 import com.hdil.saluschart.core.chart.PointType
 import com.hdil.saluschart.core.chart.ProgressChartMark
 import com.hdil.saluschart.core.chart.RangeChartMark
@@ -41,7 +41,7 @@ import com.hdil.saluschart.ui.compose.charts.BarChart
 import com.hdil.saluschart.ui.compose.charts.BubbleType
 import com.hdil.saluschart.ui.compose.charts.CalendarChart
 import com.hdil.saluschart.ui.compose.charts.CalendarEntry
-import com.hdil.saluschart.ui.compose.charts.ComboChart
+import com.hdil.saluschart.ui.compose.charts.CombinedChart
 import com.hdil.saluschart.ui.compose.charts.CellMarkerType
 import com.hdil.saluschart.ui.compose.charts.GaugeSegment
 import com.hdil.saluschart.ui.compose.charts.HorizontalStackedBarChartList
@@ -196,7 +196,7 @@ private val docScreens = listOf(
     "ProgressChart – Activity Rings",
     "ProgressChart – Progress Bars",
     "StackedBarChart – Basic",
-    "ComboChart – Steps & Heart Rate",
+    "CombinedChart – Steps & Heart Rate",
     "CalendarChart – Bubble",
     "SleepStageChart – Basic",
     "MultiSegmentGaugeChart",
@@ -739,13 +739,13 @@ private fun DocsExampleContent(name: String) {
             strokeWidth = 12f,
         )
 
-        // ── ComboChart ────────────────────────────────────────────────────────
+        // ── CombinedChart ────────────────────────────────────────────────────────
 
-        "ComboChart – Steps & Heart Rate" -> ComboChart(
+        "CombinedChart – Steps & Heart Rate" -> CombinedChart(
             modifier = Modifier.fillMaxWidth().height(320.dp),
             series = listOf(
-                ComboSeries(
-                    type = ComboSeriesType.BAR,
+                CombinedSeries(
+                    type = CombinedSeriesType.BAR,
                     data = listOf(
                         ChartMark(x = 0.0, y = 4200.0, label = "Mon"),
                         ChartMark(x = 1.0, y = 7800.0, label = "Tue"),
@@ -756,12 +756,12 @@ private fun DocsExampleContent(name: String) {
                         ChartMark(x = 6.0, y = 5400.0, label = "Sun"),
                     ),
                     color = Color(0xFF7C4DFF),
-                    axis = ComboAxis.LEFT,
+                    axis = CombinedAxis.LEFT,
                     label = "Steps",
                     barCornerRadiusFraction = 0.3f,
                 ),
-                ComboSeries(
-                    type = ComboSeriesType.LINE,
+                CombinedSeries(
+                    type = CombinedSeriesType.LINE,
                     data = listOf(
                         ChartMark(x = 0.0, y = 72.0, label = "Mon"),
                         ChartMark(x = 1.0, y = 78.0, label = "Tue"),
@@ -772,7 +772,7 @@ private fun DocsExampleContent(name: String) {
                         ChartMark(x = 6.0, y = 74.0, label = "Sun"),
                     ),
                     color = Color(0xFFE91E63),
-                    axis = ComboAxis.RIGHT,
+                    axis = CombinedAxis.RIGHT,
                     label = "Heart rate",
                     showPoints = true,
                 ),

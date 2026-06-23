@@ -12,7 +12,7 @@ SalusChart provides chart composables in two tiers. Full charts support detailed
 | [BarChart](./bar-chart) | `List<ChartMark>` | Steps, active energy, exercise minutes |
 | [LineChart](./line-chart) | `List<ChartMark>` | Weight, energy level, resting heart rate |
 | [ScatterPlot](./scatter-plot) | `List<ChartMark>` | Blood pressure or glucose samples |
-| [ComboChart](./combo-chart) | `List<ComboSeries>` | Steps + heart rate, multi-metric dashboards (dual axis) |
+| [CombinedChart](./combined-chart) | `List<CombinedSeries>` | Steps + heart rate, multi-metric dashboards (dual axis) |
 | [RangeBarChart](./range-bar-chart) | `List<RangeChartMark>` | Heart rate range, blood oxygen range, sleep range |
 | [HorizontalRangeBarChart](./horizontal-charts#horizontalrangebarchart) | `List<RangeChartMark>` | Sleep start/end windows, daily range summaries |
 | [StackedBarChart](./stacked-bar-chart) | `List<ChartMark>` | Sleep duration by stage, nutrition segments |
