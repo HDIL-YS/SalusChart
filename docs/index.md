@@ -16,10 +16,17 @@ hero:
       text: View Charts
       link: /charts/
     - theme: alt
+      text: Emulator Screens
+      link: /examples/health-emulator-screens
+    - theme: alt
       text: GitHub
       link: https://github.com/HDIL-YS/SalusChart
 
 features:
+  - title: Emulator Screen Checks
+    details: Samsung Health-style, Apple Health-style, and Wear OS screenshots across phone, foldable, and round watch emulators.
+    link: /examples/health-emulator-screens
+    linkText: View screenshots
   - title: Health-specific Components
     details: Reusable charts for common mHealth patterns such as activity rings, sleep stages, heart-rate ranges, goal progress, and health dashboards.
   - title: Health Data Pipeline
@@ -41,3 +48,27 @@ features:
   - title: Maven Central
     details: Published to Maven Central with shared module versions and release notes.
 ---
+
+## Emulator screen checks
+
+Samsung Health-style, Apple Health-style, and Wear OS screens were checked across representative phone, foldable, and round watch emulators.
+
+<div class="home-screen-preview">
+  <a class="home-screen-preview-card" href="./examples/health-emulator-screens.html">
+    <span>Samsung Health-style</span>
+    <strong>Dashboard and detail views across 3 emulator sizes</strong>
+    <img src="/examples/health-emulator-screens/samsung-pixel9profold-dashboard.png" alt="Samsung Health-style foldable dashboard emulator screenshot" />
+  </a>
+  <a class="home-screen-preview-card" href="./examples/health-emulator-screens.html">
+    <span>Apple Health-style</span>
+    <strong>Dashboard and detail views across 3 emulator sizes</strong>
+    <img src="/examples/health-emulator-screens/apple-pixel9profold-dashboard.png" alt="Apple Health-style foldable dashboard emulator screenshot" />
+  </a>
+  <a class="home-screen-preview-card" href="./examples/health-emulator-screens.html">
+    <span>Wear OS</span>
+    <strong>Activity rings, SleepStage, and heart rate on round screens</strong>
+    <img src="/examples/health-emulator-screens/wear-xl-round-activity-rings.png" alt="Wear OS XL Round activity rings emulator screenshot" />
+  </a>
+</div>
+
+[View all emulator screenshots](./examples/health-emulator-screens)

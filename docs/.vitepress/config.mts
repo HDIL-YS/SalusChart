@@ -69,6 +69,7 @@ export default defineConfig({
             { text: 'Apple Health Sample', link: '/examples/apple-health-sample' },
             { text: 'Samsung Health Sample', link: '/examples/samsung-health-sample' },
             { text: 'Wear OS Sample', link: '/examples/wear-os-sample' },
+            { text: 'Health Emulator Screens', link: '/examples/health-emulator-screens' },
           ],
         },
       ],
