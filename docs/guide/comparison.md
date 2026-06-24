@@ -4,7 +4,7 @@ How SalusChart compares to two widely used Android chart libraries: **MPAndroidC
 
 SalusChart is a health-first Jetpack Compose library. MPAndroidChart and Vico are general-purpose charting libraries — they plot numbers well, but leave health-domain modeling, aggregation, and mHealth chart patterns to the app. This page lays out the differences factually so you can pick the right tool for the job.
 
-For a quantitative measurement of how much code and how many distinct concepts each library takes to draw the same charts, see the [Developer Effort Study](./benchmark).
+For a quantitative measurement of how much code and how many distinct concepts each library takes to draw the same charts, see the [Developer Effort Study](../benchmark).
 
 > Third-party facts (versions, maintenance status, star counts) were verified in **June 2026** and will drift over time. Verify current details against each project before adopting it.
 
