@@ -13,7 +13,7 @@ Use the sample to inspect:
 
 ## Benchmark coverage
 
-The sample is also used by the [Developer Effort Study](../guide/benchmark) as an Apple-Health-style replication benchmark. It compares six charts implemented with SalusChart, MPAndroidChart, and Vico:
+The sample is also used by the [Developer Effort Study](../benchmark) as an Apple-Health-style replication benchmark. It compares six charts implemented with SalusChart, MPAndroidChart, and Vico:
 
 | Chart | SalusChart result | Competitor result |
 |---|---|---|
@@ -24,6 +24,6 @@ The sample is also used by the [Developer Effort Study](../guide/benchmark) as a
 | SleepStage | native <code>SleepStageChart</code> | MPAndroidChart and Vico hand-draw with Compose `Canvas` |
 | Range / floating bar | native <code>RangeBarChart</code> | MPAndroidChart and Vico emulate with transparent-base stacked bars |
 
-Measured totals: <mark class="salus-highlight">183 LOC / 24 API symbols / 6 of 6 native</mark> for SalusChart, versus **248 LOC / 30 symbols / 3 of 6 native** for MPAndroidChart and **238 LOC / 49 symbols / 3 of 6 native** for Vico. MPAndroidChart also needs a separate **55-LOC** rounded-bar renderer to match the Apple-style rounded bars.
+Rollups are reported in two scopes. On the native-only common subset (C2-C4), SalusChart is <mark class="salus-highlight">87 LOC / 10 API symbols</mark>, versus **115 LOC / 19 symbols** for MPAndroidChart and **110 LOC / 35 symbols** for Vico. On the overall six-chart benchmark, SalusChart is <mark class="salus-highlight">183 LOC / 24 API symbols / 6 of 6 native</mark>, versus **248 LOC / 30 symbols / 3 of 6 native** for MPAndroidChart and **238 LOC / 49 symbols / 3 of 6 native** for Vico. MPAndroidChart also needs a separate **55-LOC** rounded-bar renderer to match the Apple-style rounded bars.
 
 For the general integration architecture, see [Platform Integrations](../guide/platform-integrations).

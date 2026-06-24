@@ -1,6 +1,6 @@
 # Developer Effort Study
 
-A quantitative companion to the [Library Comparison](./comparison): two replication studies that measure **how much code and how many distinct library concepts a developer must write to draw the same chart** in SalusChart, MPAndroidChart, and Vico.
+A quantitative companion to the [Library Comparison](/guide/comparison): two replication studies that measure **how much code and how many distinct library concepts a developer must write to draw the same chart** in SalusChart, MPAndroidChart, and Vico.
 
 The same chart was implemented three times — once per library — using each library's own idiomatic API, against the same shared dataset. Crucially, each chart is **styled to match the real app's visual design**, not a plain baseline: brand colors, rounded "pill" bars, dashed goal lines, clean cards with hidden axis chrome, and rounded ring caps — applied equally to all three libraries so the comparison stays fair. One implementer wrote all three versions of every chart to reduce skill-asymmetry effects. Every implementation was built and rendered on an Android emulator (API 36).
 
@@ -18,6 +18,7 @@ Two sample apps were measured independently:
 | **User-LOC** | `cloc` Kotlin code lines of the chart function, minus `package`/`import` lines. Blank and comment lines are already excluded. |
 | **API symbols** | Distinct charting-library symbols imported by the file — a proxy for concept load. **`0` means the chart was hand-drawn with Compose `Canvas` and the library contributed nothing.** |
 | **Native** | ✅ if the library has a first-class chart type for the visual; ❌ if it had to be emulated with another type or hand-drawn. |
+| **Rollup scope** | LOC/API totals are reported in two scopes: **native-only** counts only charts that all three libraries implement natively; **overall** counts all six target charts, including emulation and custom `Canvas` fallbacks. |
 | **Build/render** | The app compiles and the chart renders on an emulator (API 36). All 18 cells pass in both studies. |
 
 The shared dataset, color palette, and app scaffold are identical across all three libraries and are excluded from measurement. Domain-conversion code (e.g. mapping plain data into a library's model types) **is** measured, because that burden is a deliberate comparison point. A shared helper one library needs but the others do not — MPAndroidChart's rounded-bar renderer — is reported separately so the per-chart totals stay comparable.
@@ -26,15 +27,35 @@ The shared dataset, color palette, and app scaffold are identical across all thr
 
 Across both studies, SalusChart needed the fewest lines of code, the fewest distinct API concepts, and was <mark class="salus-highlight">the only library with a native chart type for all six visuals</mark>.
 
-| Study | Metric | SalusChart | MPAndroidChart | Vico |
+Each LOC/API cell is **total (average per chart)** within that scope. API-symbol rollups sum the per-chart values from the cell table, so they answer "how many concepts does each implementation file expose?" The native-only lens table below separately reports de-duplicated/call-site diagnostics for the same subset.
+
+**Native-only rollup**
+
+Only charts implemented natively by all three libraries are counted.
+
+| Study | Charts counted | Library | LOC total (avg) | API symbols total (avg) |
+|---|---|---|---:|---:|
+| Apple Health | C2-C4 | **SalusChart** | <mark class="salus-highlight">87 (29.0)</mark> | <mark class="salus-highlight">10 (3.3)</mark> |
+| Apple Health | C2-C4 | MPAndroidChart | 115 (38.3) | 19 (6.3) |
+| Apple Health | C2-C4 | Vico | 110 (36.7) | 35 (11.7) |
+| Samsung Health | C1-C3 | **SalusChart** | <mark class="salus-highlight">85 (28.3)</mark> | <mark class="salus-highlight">9 (3.0)</mark> |
+| Samsung Health | C1-C3 | MPAndroidChart | 101 (33.7) | 19 (6.3) |
+| Samsung Health | C1-C3 | Vico | 110 (36.7) | 44 (14.7) |
+
+**Overall rollup**
+
+All six target charts are counted, including emulated and hand-drawn fallback cells.
+
+| Study | Library | LOC total (avg) | API symbols total (avg) | Native coverage |
 |---|---|---:|---:|---:|
-| **Apple Health** | Total user-LOC | 183 | 248 (+36%) | 238 (+30%) |
-| | Shared rounded-bar renderer | — | +55 LOC | — |
-| | Total API symbols | 24 | 30 | 49 |
-| | Native coverage | <mark class="salus-highlight">6 / 6</mark> | 3 / 6 | 3 / 6 |
-| **Samsung Health** | Total user-LOC | 160 | 183 (209 with renderer) | 186 |
-| | Total API symbols | 20 | 29 (34 with renderer) | 56 |
-| | Native coverage | <mark class="salus-highlight">6 / 6</mark> | 3 / 6 | 3 / 6 |
+| Apple Health | **SalusChart** | <mark class="salus-highlight">183 (30.5)</mark> | <mark class="salus-highlight">24 (4.0)</mark> | <mark class="salus-highlight">6 / 6</mark> |
+| Apple Health | MPAndroidChart | 248 (41.3) | 30 (5.0) | 3 / 6 |
+| Apple Health | Vico | 238 (39.7) | 49 (8.2) | 3 / 6 |
+| Samsung Health | **SalusChart** | <mark class="salus-highlight">160 (26.7)</mark> | <mark class="salus-highlight">20 (3.3)</mark> | <mark class="salus-highlight">6 / 6</mark> |
+| Samsung Health | MPAndroidChart | 183 (30.5) | 29 (4.8) | 3 / 6 |
+| Samsung Health | Vico | 186 (31.0) | 56 (9.3) | 3 / 6 |
+
+MPAndroidChart also needs a shared rounded-bar renderer to match the pill bars: **+55 LOC** in the Apple study and **+26 LOC / +5 API symbols** in the Samsung study. With that helper counted, the Samsung MPAndroidChart total becomes **209 LOC / 34 API symbols**.
 
 Two patterns hold in both studies:
 
@@ -43,7 +64,7 @@ Two patterns hold in both studies:
 
 ## Native-only lens checks
 
-The full benchmark mixes generic charts with health-shaped charts because that is what real health apps need. To avoid overstating the domain argument, each study also includes a stricter **native-only lens**: only chart cells that all three libraries implement with native primitives are counted. This does not test activity rings, SleepStage charts, or range bars; it tests whether SalusChart is still lighter when the competitors are on their strongest shared ground.
+The full benchmark mixes generic charts with health-shaped charts because that is what real health apps need. To avoid overstating the domain argument, each study also includes a stricter **native-only lens**: only chart cells that all three libraries implement with native primitives are counted. The LOC/API rollups above report this subset separately from the overall six-chart total. The lens table below adds call-site and structural-complexity checks for the same native-only subset.
 
 | Study | Native-common charts | SalusChart | MPAndroidChart | Vico |
 |---|---|---:|---:|---:|
@@ -75,8 +96,10 @@ Each cell is **user-LOC · API symbols · native**:
 | C4 Line + points + axes | 20 · 3 · ✅ | 38 · 6 · ✅ | 33 · 12 · ✅ |
 | C5 SleepStage | 40 · 6 · ✅ | 40 · 0 · ❌ | 40 · 0 · ❌ |
 | C6 Range / floating bar | 36 · 6 · ✅ | 45 · 7 · ❌ | 51 · 14 · ❌ |
-| **Total user-LOC** | 183 | 248 | 238 |
-| **Total API symbols** | 24 | 30 | 49 |
+| **Native-only user-LOC (C2-C4)** | 87 | 115 | 110 |
+| **Overall user-LOC (C1-C6)** | 183 | 248 | 238 |
+| **Native-only API symbols (C2-C4)** | 10 | 19 | 35 |
+| **Overall API symbols (C1-C6)** | 24 | 30 | 49 |
 | **Native coverage** | 6 / 6 | 3 / 6 | 3 / 6 |
 
 MPAndroidChart additionally needs a **55-LOC shared `RoundedBarChartRenderer`** (counted separately, above) to match Apple's rounded bars. SalusChart still has the lowest user-LOC in every single cell; folding in the shared renderer makes MPAndroidChart effectively +66%.
@@ -114,7 +137,7 @@ MPAndroidChart additionally needs a **55-LOC shared `RoundedBarChartRenderer`** 
 
 ## Study 2 — Samsung Health sample
 
-Six charts from a Samsung-Health-style app, styled to the Samsung spec (brand colors, green pill bars, dashed goal lines, hidden y-axis chrome). A calendar heat-map was omitted because the source app does not use one; the numbering keeps `C7` for continuity with the benchmark template.
+Six charts from a Samsung-Health-style app, styled to the Samsung spec (brand colors, green pill bars, dashed goal lines, hidden y-axis chrome).
 
 | ID | Chart | Data |
 |---|---|---|
@@ -123,7 +146,7 @@ Six charts from a Samsung-Health-style app, styled to the Samsung spec (brand co
 | C3 | Nutrition stacked bar | one week, carbs/protein/fat g/day |
 | C4 | Heart-rate range (floating) bar | one week, min/max bpm/day |
 | C5 | SleepStage | one night, AWAKE/REM/LIGHT/DEEP |
-| C7 | Activity rings | daily goals (steps / active-time / calories) |
+| C6 | Activity rings | daily goals (steps / active-time / calories) |
 
 Each cell is **user-LOC · API symbols · native**:
 
@@ -134,9 +157,11 @@ Each cell is **user-LOC · API symbols · native**:
 | C3 Nutrition stacked bar | 27 · 2 · ✅ | 31 · 6 · ✅ | 49 · 19 · ✅ |
 | C4 Heart-rate range bar | 24 · 3 · ✅ | 31 · 6 · ❌ | 37 · 12 · ❌ |
 | C5 SleepStage | 38 · 6 · ✅ | 22 · 0 · ❌ | 22 · 0 · ❌ |
-| C7 Activity rings | 13 · 2 · ✅ | 29 · 4 · ❌ | 17 · 0 · ❌ |
-| **Total user-LOC** | 160 | 183 | 186 |
-| **Total API symbols** | 20 | 29 | 56 |
+| C6 Activity rings | 13 · 2 · ✅ | 29 · 4 · ❌ | 17 · 0 · ❌ |
+| **Native-only user-LOC (C1-C3)** | 85 | 101 | 110 |
+| **Overall user-LOC (C1-C6)** | 160 | 183 | 186 |
+| **Native-only API symbols (C1-C3)** | 9 | 19 | 44 |
+| **Overall API symbols (C1-C6)** | 20 | 29 | 56 |
 | **Native coverage** | 6 / 6 | 3 / 6 | 3 / 6 |
 
 MPAndroidChart additionally needs a **26-LOC / 5-symbol shared `RoundedBarChartRenderer`** (reused across C2 and C4) for Samsung's pill bars — folding it in, its real total is **209 LOC / 34 symbols**.
@@ -159,7 +184,7 @@ MPAndroidChart additionally needs a **26-LOC / 5-symbol shared `RoundedBarChartR
 - **C3 Nutrition stacked bar** — all three stack natively, but at legend parity **Vico balloons to 49 LOC / 19 symbols** (model producer + `ExtraStore` legend key + `rememberHorizontalLegend` + `LegendItem` + `ShapeComponent`) vs SalusChart's <code>showLegend = true</code> (27 LOC / 2 symbols).
 - **C4 Heart-rate range bar** — first domain split: SalusChart's native pill <code>RangeBarChart</code> in one call vs a transparent-base stacked-bar emulation in both competitors (MPAndroidChart again routes the pill shape through the custom renderer).
 - **C5 SleepStage** — both competitors import **zero** library symbols and hand-draw a *partial* SleepStage chart (no time axis, no interaction); their smaller LOC measures "drawing it by hand," not "using the library."
-- **C7 Activity rings** — SalusChart's <code>MiniActivityRings</code> is the cheapest cell in the study (13 LOC / 2 symbols); MPAndroidChart overlays donut pies, Vico hand-draws `Canvas` arcs.
+- **C6 Activity rings** — SalusChart's <code>MiniActivityRings</code> is the cheapest cell in the study (13 LOC / 2 symbols); MPAndroidChart overlays donut pies, Vico hand-draws `Canvas` arcs.
 
 <details>
 <summary>Emulator screenshots</summary>
@@ -167,7 +192,7 @@ MPAndroidChart additionally needs a **26-LOC / 5-symbol shared `RoundedBarChartR
 ![C1 Heart-rate line](/benchmark/samsung-c1-line.png)
 ![C2 Steps bar (green pill bars + goal line)](/benchmark/samsung-c2-bar.png)
 ![C4 Heart-rate range bar (+ C5)](/benchmark/samsung-c4-rangebar.png)
-![C7 Activity rings](/benchmark/samsung-c7-rings.png)
+![C6 Activity rings](/benchmark/samsung-c7-rings.png)
 
 </details>
 

@@ -1,5 +1,28 @@
 import { defineConfig } from 'vitepress'
 
+const guideSidebar = [
+  {
+    text: 'Guide',
+    items: [
+      { text: 'Getting Started', link: '/guide/getting-started' },
+      { text: 'Installation', link: '/guide/installation' },
+      { text: 'Design Principles', link: '/guide/design-principles' },
+      { text: 'Library Comparison', link: '/guide/comparison' },
+      { text: 'Developer Effort Study', link: '/benchmark' },
+      { text: 'Modules', link: '/guide/modules' },
+      { text: 'Data Model', link: '/guide/data-model' },
+      { text: 'Data Transform', link: '/guide/data-transform' },
+      { text: 'Interactions', link: '/guide/interactions' },
+      { text: 'Customization', link: '/guide/customization' },
+      { text: 'Platform Integrations', link: '/guide/platform-integrations' },
+      { text: 'Real App Patterns', link: '/guide/real-app-patterns' },
+      { text: 'Releases', link: '/guide/releases' },
+      { text: 'Known Limitations', link: '/guide/known-limitations' },
+      { text: 'API Reference', link: '/guide/api-reference' },
+    ],
+  },
+]
+
 export default defineConfig({
   title: 'SalusChart',
   description: 'Modular Jetpack Compose visualization library for mobile health apps',
@@ -15,28 +38,8 @@ export default defineConfig({
     ],
 
     sidebar: {
-      '/guide/': [
-        {
-          text: 'Guide',
-          items: [
-            { text: 'Getting Started', link: '/guide/getting-started' },
-            { text: 'Installation', link: '/guide/installation' },
-            { text: 'Design Principles', link: '/guide/design-principles' },
-            { text: 'Library Comparison', link: '/guide/comparison' },
-            { text: 'Developer Effort Study', link: '/guide/benchmark' },
-            { text: 'Modules', link: '/guide/modules' },
-            { text: 'Data Model', link: '/guide/data-model' },
-            { text: 'Data Transform', link: '/guide/data-transform' },
-            { text: 'Interactions', link: '/guide/interactions' },
-            { text: 'Customization', link: '/guide/customization' },
-            { text: 'Platform Integrations', link: '/guide/platform-integrations' },
-            { text: 'Real App Patterns', link: '/guide/real-app-patterns' },
-            { text: 'Releases', link: '/guide/releases' },
-            { text: 'Known Limitations', link: '/guide/known-limitations' },
-            { text: 'API Reference', link: '/guide/api-reference' },
-          ],
-        },
-      ],
+      '/guide/': guideSidebar,
+      '/benchmark': guideSidebar,
       '/charts/': [
         {
           text: 'Charts',
