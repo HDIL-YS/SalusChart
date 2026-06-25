@@ -25,7 +25,7 @@ const guideSidebar = [
 
 export default defineConfig({
   title: 'SalusChart',
-  description: 'Modular Jetpack Compose visualization library for mobile health apps',
+  description: 'An open-source Jetpack Compose data visualization library for mobile health (mHealth) apps.',
   base: '/SalusChart/',
 
   themeConfig: {

@@ -2,6 +2,73 @@
 
 SalusChart charts work with concise inputs and sensible defaults first. Advanced styling, layout, interaction, and annotation controls are exposed as opt-in parameters so simple health dashboards stay small while detail views can still be tuned.
 
+## From minimal to customized
+
+A chart can be built from a few required inputs — just a `modifier` and `data` — and it renders with sensible defaults. Optional parameters then refine appearance, axis formatting, and in-chart annotations **without restructuring the call**: you add named arguments to the same composable instead of switching to a different API.
+
+![Left: a RangeBarChart called with only modifier and data renders with default styling. Right: the same call with optional parameters added — custom bar color, time-formatted y-axis labels, a y-axis highlight, and a shaded "Sleep goal range" reference zone.](/charts/minimal-to-customized.png)
+
+Both charts above come from the *same* `RangeBarChart`. The full code for each is below.
+
+### Shared data
+
+```kotlin
+import com.hdil.saluschart.core.chart.ChartMark
+import com.hdil.saluschart.core.chart.RangeChartMark
+
+// y values are decimal hours past midnight: 23.25 = 23:15, 30.75 = 06:45 next day
+private val weeklySleepRangeData = listOf(
+    RangeChartMark(x = 0.0, minPoint = ChartMark(x = 0.0, y = 23.25), maxPoint = ChartMark(x = 0.0, y = 30.75), label = "Mon"),
+    RangeChartMark(x = 1.0, minPoint = ChartMark(x = 1.0, y = 22.80), maxPoint = ChartMark(x = 1.0, y = 30.40), label = "Tue"),
+    RangeChartMark(x = 2.0, minPoint = ChartMark(x = 2.0, y = 24.10), maxPoint = ChartMark(x = 2.0, y = 31.25), label = "Wed"),
+    RangeChartMark(x = 3.0, minPoint = ChartMark(x = 3.0, y = 23.60), maxPoint = ChartMark(x = 3.0, y = 31.10), label = "Thu"),
+    RangeChartMark(x = 4.0, minPoint = ChartMark(x = 4.0, y = 25.00), maxPoint = ChartMark(x = 4.0, y = 32.00), label = "Fri"),
+    RangeChartMark(x = 5.0, minPoint = ChartMark(x = 5.0, y = 24.50), maxPoint = ChartMark(x = 5.0, y = 32.25), label = "Sat"),
+    RangeChartMark(x = 6.0, minPoint = ChartMark(x = 6.0, y = 23.10), maxPoint = ChartMark(x = 6.0, y = 30.90), label = "Sun"),
+)
+```
+
+### Minimal input
+
+```kotlin
+import com.hdil.saluschart.ui.compose.charts.RangeBarChart
+
+RangeBarChart(
+    modifier = Modifier.weight(1f).fillMaxSize(),
+    data = weeklySleepRangeData,
+)
+```
+
+### With additional parameters
+
+```kotlin
+import com.hdil.saluschart.core.chart.ReferenceLineSpec
+import com.hdil.saluschart.core.chart.chartDraw.ReferenceLineType
+import com.hdil.saluschart.ui.compose.charts.RangeBarChart
+import com.hdil.saluschart.ui.compose.charts.RangeBarChartDefaults
+
+RangeBarChart(
+    modifier = Modifier.weight(1f).fillMaxSize(),
+    data = weeklySleepRangeData,
+    yAxisLabelFormatter = RangeBarChartDefaults.HourDecimalTimeLabelFormatter,
+    barColor = Color(0xFF6E86FF),
+    barWidthRatio = 0.36f,
+    barCornerRadiusFraction = 0.5f,
+    yTickStep = 3.0,
+    showYAxisHighlight = true,
+    referenceLines = listOf(
+        ReferenceLineSpec(
+            type = ReferenceLineType.ZONE,
+            y = 23.0,
+            yEnd = 31.0,
+            label = "Sleep goal\nrange",
+            showLabel = true,
+            color = Color(0xFF4CAF50).copy(alpha = 0.5f),
+        ),
+    ),
+)
+```
+
 ## Size and layout
 
 All charts accept a `modifier` parameter. Use it to control size:
