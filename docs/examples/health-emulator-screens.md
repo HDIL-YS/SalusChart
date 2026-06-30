@@ -12,6 +12,16 @@ Representative emulator screenshots used to check Samsung Health-style, Apple He
 
 Captured on June 23, 2026. Select any screenshot to open the original image.
 
+## Device profiles
+
+| Device profile | Form factor | Width | Height | Density |
+|---|---|---|---|---|
+| Pixel_9 | Phone | 1080 px | 2424 px | 420 dpi |
+| Pixel_10_Pro_XL | Phone | 1344 px | 2992 px | 480 dpi |
+| Pixel_9_Pro_Fold | Foldable | 2076 px | 2152 px | 390 dpi |
+| Small Round | Round watch | 384 px | 384 px | 320 dpi |
+| XL Round | Round watch | 480 px | 480 px | 320 dpi |
+
 ## Samsung Health-style
 
 <div class="health-screen-grid">
