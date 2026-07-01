@@ -4,7 +4,7 @@ How SalusChart compares to two widely used Android chart libraries: **MPAndroidC
 
 SalusChart is a health-first Jetpack Compose library. MPAndroidChart and Vico are general-purpose charting libraries — they plot numbers well, but leave health-domain modeling, aggregation, and mHealth chart patterns to the app. This page lays out the differences factually so you can pick the right tool for the job.
 
-For a quantitative measurement of how much code and how many distinct concepts each library takes to draw the same charts, see the [Developer Effort Study](../comparison-study).
+For a quantitative measurement of how much code and how many distinct concepts each library takes to draw the same charts, see the [Developer Effort Study](./comparison-study).
 
 > Third-party facts (versions, maintenance status, star counts) were verified in **June 2026** and will drift over time. Verify current details against each project before adopting it.
 
@@ -29,7 +29,7 @@ For a quantitative measurement of how much code and how many distinct concepts e
 
 ## Positioning and scope
 
-**SalusChart** ships ready-made charts for recurring mHealth patterns — activity rings, sleep stages, heart-rate ranges, calendar heatmaps, goal progress, gauges, and compact dashboard summaries — plus the data models and aggregation that feed them. See [Design Principles](./design-principles).
+**SalusChart** ships ready-made charts for recurring mHealth patterns — activity rings, sleep stages, heart-rate ranges, calendar heatmaps, goal progress, gauges, and compact dashboard summaries — plus the data models and aggregation that feed them. See [Design Principles](./guide/design-principles).
 
 **MPAndroidChart** and **Vico** are general plotting engines. They render any numeric series you give them, which makes them flexible across domains, but a health app must build its own data models, time grouping, units, reference ranges, and health-specific chart types on top.
 
@@ -65,7 +65,7 @@ SalusChart is Compose-only and targets a relatively recent **minSdk 30**, which 
 | Calendar heatmap | **Yes** | No | No |
 | Compact "minimal" variants | **Yes** | No | No |
 
-MPAndroidChart covers the widest set of *classic* chart types (radar, bubble, candlestick). Vico is Cartesian-first and recently added pie/donut. SalusChart trades some of that general breadth for **health-specific marks** — range bars, activity rings, sleep timelines, calendar overviews, gauges, and card-sized minimal charts — that the other two do not provide out of the box. See the [chart reference](../charts/) for the full list.
+MPAndroidChart covers the widest set of *classic* chart types (radar, bubble, candlestick). Vico is Cartesian-first and recently added pie/donut. SalusChart trades some of that general breadth for **health-specific marks** — range bars, activity rings, sleep timelines, calendar overviews, gauges, and card-sized minimal charts — that the other two do not provide out of the box. See the [chart reference](./charts/) for the full list.
 
 ## Health and time-series fit
 
@@ -77,7 +77,7 @@ This is where the libraries differ most.
 platform records -> data:model -> TemporalDataSet -> ChartMark -> chart composable
 ```
 
-Aggregation by minute, hour, day, week, month, or year — with sums, averages, duration totals, and min/max ranges — is built in, along with guidance on when to fill gaps (steps) versus leave them sparse (weight, blood pressure). See [Data Transform](./data-transform) and [Known Limitations](./known-limitations#sparse-health-data).
+Aggregation by minute, hour, day, week, month, or year — with sums, averages, duration totals, and min/max ranges — is built in, along with guidance on when to fill gaps (steps) versus leave them sparse (weight, blood pressure). See [Data Transform](./guide/data-transform) and [Known Limitations](./guide/known-limitations#sparse-health-data).
 
 **MPAndroidChart** and **Vico** use numeric x-axes with no native date/time axis. To show dates you store numeric x-values and supply a custom value formatter to convert them back to labels yourself. Both support real-time updates (MPAndroidChart via `notifyDataSetChanged()` + viewport moves; Vico via its transaction-based model producer), but neither offers health-domain aggregation, units, or reference ranges — you build that layer in the app.
 
@@ -131,13 +131,13 @@ SalusChart aims for the shortest path from health data to a rendered chart. MPAn
 |---|---|---|---|
 | Official Wear OS support | Yes — `ui:wear-compose` | No | No (Glance app-widget module only) |
 
-SalusChart ships a dedicated Wear OS module with glanceable variants tuned for small round screens. Neither general-purpose library has a Wear-specific offering; they can technically render on a watch but are not optimized for it. See [Wear OS Charts](../charts/wear-os-charts).
+SalusChart ships a dedicated Wear OS module with glanceable variants tuned for small round screens. Neither general-purpose library has a Wear-specific offering; they can technically render on a watch but are not optimized for it. See [Wear OS Charts](./charts/wear-os-charts).
 
 ## Accessibility
 
 All three libraries render charts to a Canvas, so none expose chart marks as full semantic nodes for TalkBack out of the box:
 
-- **SalusChart** — marks and selected values are not yet fully exposed as semantic nodes. Pair charts with accessible summary text. See [Known Limitations](./known-limitations#accessibility).
+- **SalusChart** — marks and selected values are not yet fully exposed as semantic nodes. Pair charts with accessible summary text. See [Known Limitations](./guide/known-limitations#accessibility).
 - **MPAndroidChart** — no accessibility support in any released version (a screen-reader PR remains open and unmerged).
 - **Vico** — no built-in TalkBack/semantics support documented.
 

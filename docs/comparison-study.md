@@ -1,6 +1,6 @@
 # Developer Effort Study
 
-A quantitative companion to the [Library Comparison](/guide/comparison): two replication studies that measure **how much code and how many distinct library concepts a developer must write to draw the same chart** in SalusChart, MPAndroidChart, and Vico.
+A quantitative companion to the [Library Comparison](/comparison): two replication studies that measure **how much code and how many distinct library concepts a developer must write to draw the same chart** in SalusChart, MPAndroidChart, and Vico.
 
 The same chart was implemented three times — once per library — using each library's own idiomatic API, against the same shared dataset. Crucially, each chart is **styled to match the real app's visual design**, not a plain baseline: brand colors, rounded "pill" bars, dashed goal lines, clean cards with hidden axis chrome, and rounded ring caps — applied equally to all three libraries so the comparison stays fair. One implementer wrote all three versions of every chart to reduce skill-asymmetry effects. Every implementation was built and rendered on an Android emulator (API 36).
 
@@ -64,7 +64,7 @@ Two patterns hold in both studies:
 
 ## Native-only lens checks
 
-The full benchmark mixes generic charts with health-shaped charts because that is what real health apps need. To avoid overstating the domain argument, each study also includes a stricter **native-only lens**: only chart cells that all three libraries implement with native primitives are counted. The LOC/API rollups above report this subset separately from the overall six-chart total. The lens table below adds call-site and structural-complexity checks for the same native-only subset.
+The full study mixes generic charts with health-shaped charts because that is what real health apps need. To avoid overstating the domain argument, each study also includes a stricter **native-only lens**: only chart cells that all three libraries implement with native primitives are counted. The LOC/API rollups above report this subset separately from the overall six-chart total. The lens table below adds call-site and structural-complexity checks for the same native-only subset.
 
 | Study | Native-common charts | SalusChart | MPAndroidChart | Vico |
 |---|---|---:|---:|---:|
@@ -126,12 +126,12 @@ MPAndroidChart additionally needs a **55-LOC shared `RoundedBarChartRenderer`** 
 <details>
 <summary>Emulator screenshots (SalusChart / MPAndroidChart / Vico, top to bottom)</summary>
 
-![C1 Activity rings](/benchmark/apple-c1-activity-rings.png)
-![C2 Daily steps bar](/benchmark/apple-c2-steps-bar.png)
-![C3 Bar + reference line](/benchmark/apple-c3-bar-refline.png)
-![C4 Line + points + axes](/benchmark/apple-c4-line-points.png)
-![C5 SleepStage](/benchmark/apple-c5-sleepstage.png)
-![C6 Range / floating bar](/benchmark/apple-c6-range-bar.png)
+![C1 Activity rings](/comparison-study/apple-c1-activity-rings.png)
+![C2 Daily steps bar](/comparison-study/apple-c2-steps-bar.png)
+![C3 Bar + reference line](/comparison-study/apple-c3-bar-refline.png)
+![C4 Line + points + axes](/comparison-study/apple-c4-line-points.png)
+![C5 SleepStage](/comparison-study/apple-c5-sleepstage.png)
+![C6 Range / floating bar](/comparison-study/apple-c6-range-bar.png)
 
 </details>
 
@@ -189,10 +189,10 @@ MPAndroidChart additionally needs a **26-LOC / 5-symbol shared `RoundedBarChartR
 <details>
 <summary>Emulator screenshots</summary>
 
-![C1 Heart-rate line](/benchmark/samsung-c1-line.png)
-![C2 Steps bar (green pill bars + goal line)](/benchmark/samsung-c2-bar.png)
-![C4 Heart-rate range bar (+ C5)](/benchmark/samsung-c4-rangebar.png)
-![C6 Activity rings](/benchmark/samsung-c7-rings.png)
+![C1 Heart-rate line](/comparison-study/samsung-c1-line.png)
+![C2 Steps bar (green pill bars + goal line)](/comparison-study/samsung-c2-bar.png)
+![C4 Heart-rate range bar (+ C5)](/comparison-study/samsung-c4-rangebar.png)
+![C6 Activity rings](/comparison-study/samsung-c7-rings.png)
 
 </details>
 
@@ -214,7 +214,7 @@ Nothing was hidden to flatter SalusChart. Where a competitor cannot draw a chart
 
 ## Methodology
 
-The full methodology — measurement definitions, the exact `cloc` procedure, pinned library coordinates, the official examples each implementation follows, the emulation techniques used where `native = false`, and threats to validity — is documented with each study. Apple Health keeps its study artifacts under `study/` (`RESULTS.md`, `results.csv`, `lenses.csv`, `methodology.md`, `screenshots/`). Samsung Health keeps the same audit trail in its docs/root benchmark files (`RESULTS.md`, `results.csv`, `lenses.csv`, `api_complexity.md`, `methodology.md`, `docs/screenshots/`). The measurement is a deterministic shell loop over one-file-per-chart implementations, so re-running against the pinned versions reproduces the numbers.
+The full methodology — measurement definitions, the exact `cloc` procedure, pinned library coordinates, the official examples each implementation follows, the emulation techniques used where `native = false`, and threats to validity — is documented with each study. Apple Health keeps its study artifacts under `study/` (`RESULTS.md`, `results.csv`, `lenses.csv`, `methodology.md`, `screenshots/`). Samsung Health keeps the same audit trail in its docs/root study files (`RESULTS.md`, `results.csv`, `lenses.csv`, `api_complexity.md`, `methodology.md`, `docs/screenshots/`). The measurement is a deterministic shell loop over one-file-per-chart implementations, so re-running against the pinned versions reproduces the numbers.
 
 ```bash
 # Per-file measurement (run per library/chart)
