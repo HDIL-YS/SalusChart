@@ -2,7 +2,7 @@
 
 SalusChart is designed for mobile health visualization rather than general-purpose charting. The library packages common mHealth patterns into reusable Compose components so apps can present personal health data consistently across dashboards, detail views, and wearable screens.
 
-For how this differs from general-purpose libraries such as MPAndroidChart and Vico, see [Library Comparison](./comparison).
+For how this differs from general-purpose libraries such as MPAndroidChart and Vico, see [Library Comparison](../comparison).
 
 ## Health-specific components
 

@@ -82,28 +82,28 @@ The same `RangeBarChart`: on the left, called with only its required inputs; on 
 
 We rebuilt the charts of an Apple-Health-style and a Samsung-Health-style screen three times each — once in SalusChart, once in MPAndroidChart, once in Vico — and styled each to match the real app. Across all 12 target charts, SalusChart was the only library with a native chart type for every one, while writing about 20% fewer lines of code and 24–58% fewer distinct API symbols than the two general-purpose libraries.
 
-[See the developer effort study](./benchmark)
+[See the library comparison](./comparison)
 
 ## Checked on real device profiles
 
 The charts were rendered on four emulator profiles — a compact phone (Pixel 9), a large phone (Pixel 10 Pro XL), a foldable (Pixel 9 Pro Fold), and a round Wear OS watch, all on API 36. The same chart composables reflow across the phone form factors, while the dedicated Wear OS components handle the round watch face.
 
 <div class="home-screen-preview">
-  <a class="home-screen-preview-card" href="./examples/health-emulator-screens.html">
+  <a class="home-screen-preview-card" href="./screens.html">
     <span>Samsung Health-style</span>
     <strong>Dashboard and detail views across three emulator sizes</strong>
     <img src="/examples/health-emulator-screens/samsung-pixel9profold-dashboard.png" alt="Samsung Health-style foldable dashboard emulator screenshot" />
   </a>
-  <a class="home-screen-preview-card" href="./examples/health-emulator-screens.html">
+  <a class="home-screen-preview-card" href="./screens.html">
     <span>Apple Health-style</span>
     <strong>Dashboard and detail views across three emulator sizes</strong>
     <img src="/examples/health-emulator-screens/apple-pixel9profold-dashboard.png" alt="Apple Health-style foldable dashboard emulator screenshot" />
   </a>
-  <a class="home-screen-preview-card" href="./examples/health-emulator-screens.html">
+  <a class="home-screen-preview-card" href="./screens.html">
     <span>Wear OS</span>
     <strong>Activity rings, sleep stages, and heart rate on round screens</strong>
     <img src="/examples/health-emulator-screens/wear-xl-round-activity-rings.png" alt="Wear OS XL Round activity rings emulator screenshot" />
   </a>
 </div>
 
-[View all emulator screenshots](./examples/health-emulator-screens)
+[View all emulator screenshots](./screens.html)

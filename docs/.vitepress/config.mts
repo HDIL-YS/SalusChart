@@ -7,8 +7,7 @@ const guideSidebar = [
       { text: 'Getting Started', link: '/guide/getting-started' },
       { text: 'Installation', link: '/guide/installation' },
       { text: 'Design Principles', link: '/guide/design-principles' },
-      { text: 'Library Comparison', link: '/guide/comparison' },
-      { text: 'Developer Effort Study', link: '/benchmark' },
+      { text: 'Library Comparison', link: '/comparison' },
       { text: 'Modules', link: '/guide/modules' },
       { text: 'Data Model', link: '/guide/data-model' },
       { text: 'Data Transform', link: '/guide/data-transform' },
@@ -27,6 +26,7 @@ export default defineConfig({
   title: 'SalusChart',
   description: 'An open-source Jetpack Compose data visualization library for mobile health (mHealth) apps.',
   base: '/SalusChart/',
+  cleanUrls: true,
 
   themeConfig: {
     nav: [
@@ -39,7 +39,8 @@ export default defineConfig({
 
     sidebar: {
       '/guide/': guideSidebar,
-      '/benchmark': guideSidebar,
+      '/comparison': guideSidebar,
+      '/comparison-study': guideSidebar,
       '/charts/': [
         {
           text: 'Charts',
@@ -72,7 +73,7 @@ export default defineConfig({
             { text: 'Apple Health Sample', link: '/examples/apple-health-sample' },
             { text: 'Samsung Health Sample', link: '/examples/samsung-health-sample' },
             { text: 'Wear OS Sample', link: '/examples/wear-os-sample' },
-            { text: 'Health Emulator Screens', link: '/examples/health-emulator-screens' },
+            { text: 'Health Emulator Screens', link: '/screens' },
           ],
         },
       ],
