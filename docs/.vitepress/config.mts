@@ -7,7 +7,8 @@ const guideSidebar = [
       { text: 'Getting Started', link: '/guide/getting-started' },
       { text: 'Installation', link: '/guide/installation' },
       { text: 'Design Principles', link: '/guide/design-principles' },
-      { text: 'Library Comparison', link: '/comparison' },
+      { text: 'Library Comparison', link: '/library-comparison' },
+      { text: 'Library Overview', link: '/library-overview' },
       { text: 'Modules', link: '/guide/modules' },
       { text: 'Data Model', link: '/guide/data-model' },
       { text: 'Data Transform', link: '/guide/data-transform' },
@@ -39,8 +40,8 @@ export default defineConfig({
 
     sidebar: {
       '/guide/': guideSidebar,
-      '/comparison': guideSidebar,
-      '/comparison-study': guideSidebar,
+      '/library-overview': guideSidebar,
+      '/library-comparison': guideSidebar,
       '/charts/': [
         {
           text: 'Charts',
@@ -73,7 +74,7 @@ export default defineConfig({
             { text: 'Apple Health Sample', link: '/examples/apple-health-sample' },
             { text: 'Samsung Health Sample', link: '/examples/samsung-health-sample' },
             { text: 'Wear OS Sample', link: '/examples/wear-os-sample' },
-            { text: 'Health Emulator Screens', link: '/screens' },
+            { text: 'Emulator Screenshots', link: '/emulator-screenshots' },
           ],
         },
       ],

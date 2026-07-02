@@ -9,7 +9,7 @@ Practical, copy-pasteable chart examples organized by scenario.
 - [Apple Health Sample](./apple-health-sample) — Apple Health integration sample
 - [Samsung Health Sample](./samsung-health-sample) — Samsung Health integration sample
 - [Wear OS Sample](./wear-os-sample) — standalone Wear OS sample app
-- [Health Emulator Screens](../screens) — Samsung Health-style, Apple Health-style, and Wear OS emulator screenshots
+- [Emulator Screenshots](../emulator-screenshots) — Samsung Health-style, Apple Health-style, and Wear OS emulator screenshots
 
 ## External sample apps
 

@@ -13,7 +13,7 @@ Use the sample to inspect:
 
 ## Study coverage
 
-The sample is also used by the [Developer Effort Study](../comparison-study) as a Samsung-Health-style replication study. It compares six charts implemented with SalusChart, MPAndroidChart, and Vico:
+The sample is also used by the [Library Comparison](../library-comparison) as a Samsung-Health-style replication study. It compares six charts implemented with SalusChart, MPAndroidChart, and Vico:
 
 | Chart | SalusChart result | Competitor result |
 |---|---|---|
