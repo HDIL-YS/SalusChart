@@ -1,6 +1,6 @@
-# Developer Effort Study
+# Library Comparison
 
-A quantitative companion to the [Library Comparison](/comparison): two replication studies that measure **how much code and how many distinct library concepts a developer must write to draw the same chart** in SalusChart, MPAndroidChart, and Vico.
+A quantitative comparison of **how much code and how many distinct library concepts a developer must write to draw the same chart** in SalusChart, MPAndroidChart, and Vico. For a broader feature-by-feature overview, see the [Library Overview](/library-overview).
 
 The same chart was implemented three times — once per library — using each library's own idiomatic API, against the same shared dataset. Crucially, each chart is **styled to match the real app's visual design**, not a plain baseline: brand colors, rounded "pill" bars, dashed goal lines, clean cards with hidden axis chrome, and rounded ring caps — applied equally to all three libraries so the comparison stays fair. One implementer wrote all three versions of every chart to reduce skill-asymmetry effects. Every implementation was built and rendered on an Android emulator (API 36).
 
@@ -126,12 +126,12 @@ MPAndroidChart additionally needs a **55-LOC shared `RoundedBarChartRenderer`** 
 <details>
 <summary>Emulator screenshots (SalusChart / MPAndroidChart / Vico, top to bottom)</summary>
 
-![C1 Activity rings](/comparison-study/apple-c1-activity-rings.png)
-![C2 Daily steps bar](/comparison-study/apple-c2-steps-bar.png)
-![C3 Bar + reference line](/comparison-study/apple-c3-bar-refline.png)
-![C4 Line + points + axes](/comparison-study/apple-c4-line-points.png)
-![C5 SleepStage](/comparison-study/apple-c5-sleepstage.png)
-![C6 Range / floating bar](/comparison-study/apple-c6-range-bar.png)
+![C1 Activity rings](/library-comparison/apple-c1-activity-rings.png)
+![C2 Daily steps bar](/library-comparison/apple-c2-steps-bar.png)
+![C3 Bar + reference line](/library-comparison/apple-c3-bar-refline.png)
+![C4 Line + points + axes](/library-comparison/apple-c4-line-points.png)
+![C5 SleepStage](/library-comparison/apple-c5-sleepstage.png)
+![C6 Range / floating bar](/library-comparison/apple-c6-range-bar.png)
 
 </details>
 
@@ -189,10 +189,10 @@ MPAndroidChart additionally needs a **26-LOC / 5-symbol shared `RoundedBarChartR
 <details>
 <summary>Emulator screenshots</summary>
 
-![C1 Heart-rate line](/comparison-study/samsung-c1-line.png)
-![C2 Steps bar (green pill bars + goal line)](/comparison-study/samsung-c2-bar.png)
-![C4 Heart-rate range bar (+ C5)](/comparison-study/samsung-c4-rangebar.png)
-![C6 Activity rings](/comparison-study/samsung-c7-rings.png)
+![C1 Heart-rate line](/library-comparison/samsung-c1-line.png)
+![C2 Steps bar (green pill bars + goal line)](/library-comparison/samsung-c2-bar.png)
+![C4 Heart-rate range bar (+ C5)](/library-comparison/samsung-c4-rangebar.png)
+![C6 Activity rings](/library-comparison/samsung-c7-rings.png)
 
 </details>
 

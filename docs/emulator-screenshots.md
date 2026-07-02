@@ -1,4 +1,4 @@
-# Health Emulator Screens
+# Emulator Screenshots
 
 Representative emulator screenshots used to check Samsung Health-style, Apple Health-style, and Wear OS screens across phone, foldable, and round watch form factors.
 
