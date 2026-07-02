@@ -8,7 +8,7 @@ Representative emulator screenshots used to check Samsung Health-style, Apple He
 |---|---|---|
 | Samsung Health-style | Pixel_9, Pixel_10_Pro_XL, Pixel_9_Pro_Fold | Dashboard, detail view |
 | Apple Health-style | Pixel_9, Pixel_10_Pro_XL, Pixel_9_Pro_Fold | Dashboard, detail view |
-| Wear OS | Small Round, XL Round | Activity rings, SleepStage, heart rate |
+| Wear OS | Small Round, XL Round | Activity rings, SleepStage, heart rate, stress status |
 
 Captured on June 23, 2026. Select any screenshot to open the original image.
 
@@ -155,19 +155,28 @@ Captured on June 23, 2026. Select any screenshot to open the original image.
   <figure class="health-screen-card">
     <figcaption>
       <span>Small Round</span>
-      <strong>SleepStage</strong>
+      <strong>Heart rate</strong>
     </figcaption>
-    <a href="./examples/health-emulator-screens/wear-small-round-sleep-stage.png" target="_blank" rel="noreferrer">
-      <img src="/examples/health-emulator-screens/wear-small-round-sleep-stage.png" alt="Wear OS Small Round SleepStage screenshot" />
+    <a href="./examples/health-emulator-screens/wear-small-round-heart-rate.png" target="_blank" rel="noreferrer">
+      <img src="/examples/health-emulator-screens/wear-small-round-heart-rate.png" alt="Wear OS Small Round heart rate screenshot" />
     </a>
   </figure>
   <figure class="health-screen-card">
     <figcaption>
       <span>Small Round</span>
-      <strong>Heart rate</strong>
+      <strong>Stress status</strong>
     </figcaption>
-    <a href="./examples/health-emulator-screens/wear-small-round-heart-rate.png" target="_blank" rel="noreferrer">
-      <img src="/examples/health-emulator-screens/wear-small-round-heart-rate.png" alt="Wear OS Small Round heart rate screenshot" />
+    <a href="./examples/health-emulator-screens/wear-small-round-stress-status.png" target="_blank" rel="noreferrer">
+      <img src="/examples/health-emulator-screens/wear-small-round-stress-status.png" alt="Wear OS Small Round stress status screenshot" />
+    </a>
+  </figure>
+  <figure class="health-screen-card">
+    <figcaption>
+      <span>Small Round</span>
+      <strong>SleepStage</strong>
+    </figcaption>
+    <a href="./examples/health-emulator-screens/wear-small-round-sleep-stage.png" target="_blank" rel="noreferrer">
+      <img src="/examples/health-emulator-screens/wear-small-round-sleep-stage.png" alt="Wear OS Small Round SleepStage screenshot" />
     </a>
   </figure>
   <figure class="health-screen-card">
@@ -182,19 +191,28 @@ Captured on June 23, 2026. Select any screenshot to open the original image.
   <figure class="health-screen-card">
     <figcaption>
       <span>XL Round</span>
-      <strong>SleepStage</strong>
+      <strong>Heart rate</strong>
     </figcaption>
-    <a href="./examples/health-emulator-screens/wear-xl-round-sleep-stage.png" target="_blank" rel="noreferrer">
-      <img src="/examples/health-emulator-screens/wear-xl-round-sleep-stage.png" alt="Wear OS XL Round SleepStage screenshot" />
+    <a href="./examples/health-emulator-screens/wear-xl-round-heart-rate.png" target="_blank" rel="noreferrer">
+      <img src="/examples/health-emulator-screens/wear-xl-round-heart-rate.png" alt="Wear OS XL Round heart rate screenshot" />
     </a>
   </figure>
   <figure class="health-screen-card">
     <figcaption>
       <span>XL Round</span>
-      <strong>Heart rate</strong>
+      <strong>Stress status</strong>
     </figcaption>
-    <a href="./examples/health-emulator-screens/wear-xl-round-heart-rate.png" target="_blank" rel="noreferrer">
-      <img src="/examples/health-emulator-screens/wear-xl-round-heart-rate.png" alt="Wear OS XL Round heart rate screenshot" />
+    <a href="./examples/health-emulator-screens/wear-xl-round-stress-status.png" target="_blank" rel="noreferrer">
+      <img src="/examples/health-emulator-screens/wear-xl-round-stress-status.png" alt="Wear OS XL Round stress status screenshot" />
+    </a>
+  </figure>
+  <figure class="health-screen-card">
+    <figcaption>
+      <span>XL Round</span>
+      <strong>SleepStage</strong>
+    </figcaption>
+    <a href="./examples/health-emulator-screens/wear-xl-round-sleep-stage.png" target="_blank" rel="noreferrer">
+      <img src="/examples/health-emulator-screens/wear-xl-round-sleep-stage.png" alt="Wear OS XL Round SleepStage screenshot" />
     </a>
   </figure>
 </div>
